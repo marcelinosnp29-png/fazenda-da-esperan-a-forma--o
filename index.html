@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fazenda da Esperança Formação - Cursos Online Profissionais</title>
+    <meta name="description" content="Descubra cursos online profissionais da Fazenda da Esperança Formação. Aprenda e cresça com nosso conteúdo exclusivo e aulas inspiradoras.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.suaempresa.com.br/"> <!-- Substitua pela URL real -->
+    <meta property="og:title" content="Fazenda da Esperança Formação - Cursos Online Profissionais">
+    <meta property="og:description" content="Descubra cursos online profissionais da Fazenda da Esperança Formação. Aprenda e cresça com nosso conteúdo exclusivo e aulas inspiradoras.">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630/2563eb/ffffff?text=Fazenda+da+Esperanca+Formacao"> <!-- Substitua pela URL da imagem -->
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.suaempresa.com.br/"> <!-- Substitua pela URL real -->
+    <meta property="twitter:title" content="Fazenda da Esperança Formação - Cursos Online Profissionais">
+    <meta property="twitter:description" content="Descubra cursos online profissionais da Fazenda da Esperança Formação. Aprenda e cresça com nosso conteúdo exclusivo e aulas inspiradoras.">
+    <meta property="twitter:image" content="https://via.placeholder.com/1200x630/2563eb/ffffff?text=Fazenda+da+Esperanca+Formacao"> <!-- Substitua pela URL da imagem -->
+
+    <!-- Schema.org LocalBusiness -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Fazenda da Esperança Formação",
+      "image": "https://via.placeholder.com/500x500/2563eb/ffffff?text=Logo+Fazenda+da+Esperanca",
+      "url": "https://www.suaempresa.com.br/", <!-- Substitua pela URL real -->
+      "telephone": "+5511999999999",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Rua Exemplo, 123", <!-- Substitua pelo endereço real -->
+        "addressLocality": "Cidade Exemplo",
+        "addressRegion": "SP",
+        "postalCode": "01000-000",
+        "addressCountry": "BR"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "09:00",
+          "closes": "18:00"
+        }
+      ],
+      "sameAs": [
+        "https://www.youtube.com/user/FazendaDaEsperancaOficial", <!-- Substitua pelo canal do YouTube real -->
+        "https://www.facebook.com/fazendadaesperancaoficial", <!-- Substitua pelas redes sociais reais -->
+        "https://www.instagram.com/fazendadaesperanca"
+      ]
+    }
+    </script>
+
+    <!-- Google Analytics -->
+    <!-- GA_TRACKING_ID: G-XXXXXXXX -->
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #0ea5e9;
+            --text-color: #333;
+            --light-text-color: #fff;
+            --bg-color: #f8fafc;
+            --dark-bg-color: #1e293b;
+            --font-family: 'Poppins', sans-serif;
+            --breakpoint-md: 768px;
+            --breakpoint-lg: 1024px;
+            --header-height: 70px;
+        }
+
+        /* Base styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-family);
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .section-title {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 60px;
+            color: var(--dark-bg-color);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--light-text-color);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .logo span {
+            color: var(--secondary-color);
+        }
+
+        .nav-menu {
+            display: none; /* Hidden by default on mobile */
+            flex-direction: column;
+            position: absolute;
+            top: var(--header-height);
+            left: 0;
+            width: 100%;
+            background-color: var(--light-text-color);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .nav-menu.active {
+            transform: translateY(0);
+        }
+
+        .nav-menu li {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .nav-menu a {
+            color: var(--text-color);
+            font-weight: 600;
+            padding: 10px 15px;
+            display: block;
+            transition: color 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-color);
+        }
+
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 25px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .hamburger .bar {
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-color);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .hamburger.active .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active .bar:nth-child(1) {
+            transform: translateY(11px) rotate(45deg);
+        }
+
+        .hamburger.active .bar:nth-child(3) {
+            transform: translateY(-11px) rotate(-45deg);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--light-text-color);
+            text-align: center;
+            padding: 100px 20px;
+            display: flex;
+            align-items: center;
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* About Section */
+        .about {
+            padding: 80px 0;
+            background-color: var(--light-text-color);
+            text-align: center;
+        }
+
+        .about-content {
+            max-width: 900px;
+            margin: 0 auto;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        /* Services Section (Cursos) */
+        .services {
+            padding: 80px 0;
+            background-color: var(--bg-color);
+        }
+
+        .service-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .service-card {
+            background-color: var(--light-text-color);
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .service-card img {
+            max-width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .service-card p {
+            font-size: 1em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .service-card .btn {
+            background-color: var(--secondary-color);
+        }
+
+        .service-card .btn:hover {
+            background-color: var(--primary-color);
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 80px 0;
+            background-color: var(--light-text-color);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .testimonial-card {
+            background-color: var(--bg-color);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .testimonial-card p {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: #444;
+            font-size: 1.1em;
+        }
+
+        .testimonial-card .author {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 80px 0;
+            background-color: var(--bg-color);
+        }
+
+        .contact-content {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .contact-info {
+            flex: 1;
+            padding: 20px;
+            background-color: var(--light-text-color);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .contact-info h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .contact-info p {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .contact-info p svg {
+            color: var(--secondary-color);
+            font-size: 1.2em;
+        }
+
+        .contact-form {
+            flex: 2;
+            padding: 30px;
+            background-color: var(--light-text-color);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .contact-form h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .contact-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .contact-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .contact-form input[type="text"],
+        .contact-form input[type="email"],
+        .contact-form input[type="tel"],
+        .contact-form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: var(--font-family);
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--dark-bg-color);
+            color: var(--light-text-color);
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .footer p {
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .footer .social-links a {
+            color: var(--light-text-color);
+            font-size: 1.5em;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .footer .social-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* WhatsApp Button */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25d366;
+            color: var(--light-text-color);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+            transition: transform 0.3s ease;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Cookie Banner */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--dark-bg-color);
+            color: var(--light-text-color);
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            z-index: 10000;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+            transform: translateY(100%);
+            transition: transform 0.5s ease-out;
+        }
+
+        .cookie-banner.show {
+            transform: translateY(0);
+        }
+
+        .cookie-banner p {
+            font-size: 0.9em;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .cookie-banner .cookie-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .cookie-banner .btn-cookie {
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+        }
+
+        .cookie-banner .btn-accept {
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
+        }
+
+        .cookie-banner .btn-accept:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .cookie-banner .btn-reject {
+            background-color: #6b7280;
+            color: var(--light-text-color);
+        }
+
+        .cookie-banner .btn-reject:hover {
+            background-color: #4b5563;
+        }
+
+        /* Animations with IntersectionObserver */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Media Queries */
+        @media (min-width: var(--breakpoint-md)) {
+            .hamburger {
+                display: none;
+            }
+
+            .nav-menu {
+                display: flex;
+                flex-direction: row;
+                position: static;
+                width: auto;
+                box-shadow: none;
+                padding: 0;
+                transform: translateY(0);
+            }
+
+            .nav-menu li {
+                margin: 0 15px;
+            }
+
+            .nav-menu a {
+                padding: 0;
+            }
+
+            .hero h1 {
+                font-size: 4em;
+            }
+
+            .hero p {
+                font-size: 1.3em;
+            }
+
+            .service-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .testimonial-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contact-content {
+                flex-direction: row;
+            }
+
+            .cookie-banner {
+                flex-direction: row;
+                padding: 15px 40px;
+            }
+            .cookie-banner p {
+                text-align: left;
+            }
+        }
+
+        @media (min-width: var(--breakpoint-lg)) {
+            .hero h1 {
+                font-size: 5em;
+            }
+
+            .service-cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .testimonial-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="#" class="logo">Fazenda da Esperança <span>Formação</span></a>
+            <nav>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="#hero">Início</a></li>
+                    <li><a href="#about">Sobre</a></li>
+                    <li><a href="#services">Cursos</a></li>
+                    <li><a href="#testimonials">Depoimentos</a></li>
+                    <li><a href="#contact">Contato</a></li>
+                </ul>
+                <div class="hamburger" id="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="hero">
+            <div class="container animate-on-scroll">
+                <h1>Transforme Seu Futuro com a Fazenda da Esperança Formação</h1>
+                <p>Cursos online profissionais e inspiradores para o seu desenvolvimento pessoal e profissional. Conteúdo exclusivo e de qualidade.</p>
+                <a href="#services" class="btn">Ver Nossos Cursos</a>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <div class="container animate-on-scroll">
+                <h2 class="section-title">Sobre a Fazenda da Esperança Formação</h2>
+                <div class="about-content">
+                    <p>A Fazenda da Esperança Formação é uma iniciativa dedicada a oferecer conhecimento e capacitação através de cursos online. Com uma metodologia focada no desenvolvimento humano e profissional, buscamos capacitar indivíduos para novos desafios e oportunidades, sempre com base nos valores de esperança, solidariedade e transformação.</p>
+                    <p>Nossos cursos são desenvolvidos por especialistas e disponibilizados de forma acessível, muitos deles através de nossa plataforma no YouTube, garantindo que o aprendizado de qualidade chegue a todos que buscam aprimoramento e um novo caminho.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="services">
+            <div class="container">
+                <h2 class="section-title animate-on-scroll">Nossos Cursos Online</h2>
+                <div class="service-cards">
+                    <div class="service-card animate-on-scroll">
+                        <img src="https://via.placeholder.com/400x200/2563eb/ffffff?text=Curso+Lideranca" alt="Curso de Liderança e Gestão">
+                        <h3>Liderança e Gestão de Equipes</h3>
+                        <p>Desenvolva habilidades essenciais para liderar com eficácia e inspirar sua equipe a alcançar resultados extraordinários.</p>
+                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="btn">Assistir no YouTube</a>
+                    </div>
+                    <div class="service-card animate-on-scroll">
+                        <img src="https://via.placeholder.com/400x200/0ea5e9/ffffff?text=Curso+Empreendedorismo" alt="Curso de Empreendedorismo">
+                        <h3>Empreendedorismo Social e Inovação</h3>
+                        <p>Aprenda a criar e gerenciar projetos com impacto social positivo, transformando ideias em realidade sustentável.</p>
+                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="btn">Assistir no YouTube</a>
+                    </div>
+                    <div class="service-card animate-on-scroll">
+                        <img src="https://via.placeholder.com/400x200/2563eb/ffffff?text=Curso+Comunicacao" alt="Curso de Comunicação Eficaz">
+                        <h3>Comunicação Eficaz e Oratória</h3>
+                        <p>Domine a arte de se comunicar com clareza e confiança, seja em apresentações públicas ou no dia a dia profissional.</p>
+                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="btn">Assistir no YouTube</a>
+                    </div>
+                    <div class="service-card animate-on-scroll">
+                        <img src="https://via.placeholder.com/400x200/0ea5e9/ffffff?text=Curso+Bem+Estar" alt="Curso de Bem-Estar e Qualidade de Vida">
+                        <h3>Bem-Estar e Qualidade de Vida</h3>
+                        <p>Descubra práticas e conhecimentos para promover o equilíbrio e a saúde mental, física e espiritual.</
