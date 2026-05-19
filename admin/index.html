@@ -1,208 +1,552 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fazenda da Esperança Formação - Login Admin</title>
-    <style>
-        :root {
-            --primary-color: #2563eb; /* Cor destaque */
-            --background-dark: #1a202c; /* Fundo principal */
-            --card-background: #2d3748; /* Fundo do card */
-            --text-light: #e2e8f0; /* Texto claro */
-            --text-muted: #a0aec0; /* Texto sutil */
-            --input-background: #4a5568; /* Fundo do input */
-            --border-color: #4a5568; /* Cor da borda */
-            --error-color: #ef4444; /* Cor de erro */
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — Painel Admin | Fazenda da Esperança Formação</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        body {
-            font-family: 'Inter', sans-serif; /* Uma fonte moderna e limpa */
-            background-color: var(--background-dark);
-            color: var(--text-light);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-        }
+    :root {
+      --bg-page:    #0f1117;
+      --bg-card:    #1a1d27;
+      --bg-input:   #12151f;
+      --border:     #2a2d3e;
+      --border-focus: #2563eb;
+      --accent:     #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-active: #1e40af;
+      --text-primary:   #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-label:     #cbd5e1;
+      --error-bg:   #2d1b1b;
+      --error-border: #7f1d1d;
+      --error-text: #fca5a5;
+      --success-bg: #0f2d1a;
+      --success-border: #14532d;
+      --success-text: #86efac;
+      --shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+      --radius: 14px;
+      --radius-sm: 8px;
+      --transition: 0.2s ease;
+    }
 
-        .login-card {
-            background-color: var(--card-background);
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
+    html, body {
+      height: 100%;
+    }
 
-        h1 {
-            color: var(--text-light);
-            margin-bottom: 30px;
-            font-size: 1.8rem;
-            font-weight: 600;
-        }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37, 99, 235, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 110%, rgba(37, 99, 235, 0.06) 0%, transparent 60%);
+    }
 
-        label {
-            display: block;
-            text-align: left;
-            margin-bottom: 8px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 44px 40px 40px;
+      animation: fadeUp 0.4s ease both;
+    }
 
-        input[type="email"],
-        input[type="password"] {
-            width: calc(100% - 24px); /* Ajusta para padding */
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background-color: var(--input-background);
-            color: var(--text-light);
-            font-size: 1rem;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-        input[type="email"]:focus,
-        input[type="password"]:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.5); /* Sombra suave com cor destaque */
-        }
+    /* ── Logo / Header ── */
+    .card-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
 
-        button[type="submit"] {
-            width: 100%;
-            padding: 14px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
+    .logo-wrap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--accent), #1d4ed8);
+      border-radius: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+    }
 
-        button[type="submit"]:hover {
-            background-color: #1d5ed1; /* Um pouco mais escuro no hover */
-            transform: translateY(-2px);
-        }
+    .logo-wrap svg {
+      width: 30px;
+      height: 30px;
+      fill: #fff;
+    }
 
-        button[type="submit"]:active {
-            transform: translateY(0);
-        }
+    .card-header h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+      line-height: 1.3;
+    }
 
-        #erro-login {
-            color: var(--error-color);
-            background-color: rgba(239, 68, 68, 0.1);
-            border: 1px solid var(--error-color);
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            text-align: left;
-        }
+    .card-header p {
+      margin-top: 6px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.2px;
+    }
 
-        /* Responsividade básica */
-        @media (max-width: 480px) {
-            .login-card {
-                padding: 30px 20px;
-                margin: 0 15px;
-            }
-            h1 {
-                font-size: 1.6rem;
-            }
-            input, button {
-                font-size: 0.95rem;
-            }
-        }
-    </style>
+    /* ── Form ── */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-label);
+      margin-bottom: 7px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap svg {
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 17px;
+      height: 17px;
+      stroke: var(--text-secondary);
+      pointer-events: none;
+      transition: stroke var(--transition);
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 11px 42px 11px 40px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 0.93rem;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      -webkit-appearance: none;
+    }
+
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    input[type="text"]:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+    }
+
+    input[type="email"]:focus ~ svg,
+    input[type="password"]:focus ~ svg,
+    input[type="text"]:focus ~ svg {
+      stroke: var(--accent);
+    }
+
+    input::placeholder {
+      color: #3d4260;
+    }
+
+    /* toggle senha */
+    .toggle-pw {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px;
+      display: flex;
+      align-items: center;
+      color: var(--text-secondary);
+      transition: color var(--transition);
+    }
+
+    .toggle-pw:hover { color: var(--text-primary); }
+    .toggle-pw svg { width: 17px; height: 17px; stroke: currentColor; fill: none; }
+
+    /* ── Alertas ── */
+    .alert {
+      display: none;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.84rem;
+      line-height: 1.45;
+      margin-bottom: 20px;
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .alert.show { display: flex; }
+
+    .alert-error {
+      background: var(--error-bg);
+      border: 1px solid var(--error-border);
+      color: var(--error-text);
+    }
+
+    .alert-success {
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: var(--success-text);
+    }
+
+    .alert svg {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      margin-top: 1px;
+    }
+
+    /* ── Botão ── */
+    .btn-login {
+      width: 100%;
+      padding: 13px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 4px;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-login:hover:not(:disabled) {
+      background: var(--accent-hover);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+      transform: translateY(-1px);
+    }
+
+    .btn-login:active:not(:disabled) {
+      background: var(--accent-active);
+      transform: translateY(0);
+    }
+
+    .btn-login:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    /* spinner */
+    .spinner {
+      display: none;
+      width: 17px;
+      height: 17px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    .btn-login.loading .spinner { display: block; }
+    .btn-login.loading .btn-text { display: none; }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ── Footer ── */
+    .card-footer {
+      margin-top: 28px;
+      text-align: center;
+      font-size: 0.75rem;
+      color: #3d4260;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+
+    .card-footer span {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .card { padding: 32px 24px 28px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="login-card">
-        <h1>Login Admin</h1>
-        <div id="erro-login" style="display:none;"></div>
-        <form id="login-form">
-            <label for="email">Email</label>
-            <input type="email" id="email" required autocomplete="email">
 
-            <label for="password">Senha</label>
-            <input type="password" id="password" required autocomplete="current-password">
+  <div class="card" role="main">
 
-            <button type="submit">Entrar</button>
-        </form>
+    <!-- Header -->
+    <div class="card-header">
+      <div class="logo-wrap" aria-hidden="true">
+        <!-- ícone folha / esperança -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2-8 2s-1-5-5-5c0 0 2 3 0 8z"/>
+        </svg>
+      </div>
+      <h1>Fazenda da Esperança</h1>
+      <p>Painel Administrativo — Formação</p>
     </div>
 
-    <!-- Supabase CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const SUPABASE_URL = 'COLE_SUA_URL'; // Substitua pela sua URL do Supabase
-        const SUPABASE_KEY = 'COLE_SUA_CHAVE'; // Substitua pela sua chave anon pública do Supabase
+    <!-- Alerta de erro -->
+    <div class="alert alert-error" id="erro-login" role="alert" aria-live="polite">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span id="erro-login-msg">Credenciais inválidas. Verifique e tente novamente.</span>
+    </div>
 
-        const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    <!-- Alerta de sucesso -->
+    <div class="alert alert-success" id="sucesso-login" role="status" aria-live="polite">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      <span>Login realizado! Redirecionando…</span>
+    </div>
 
-        const loginForm = document.getElementById('login-form');
-        const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
-        const erroLoginDiv = document.getElementById('erro-login');
+    <!-- Formulário -->
+    <form id="form-login" novalidate autocomplete="on">
 
-        // Função para verificar a sessão ao carregar a página
-        async function checkSession() {
-            try {
-                const { data: { session }, error } = await supabase.auth.getSession();
-                if (error) throw error;
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <div class="input-wrap">
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="seu@email.com"
+            autocomplete="username"
+            required
+            spellcheck="false"
+          />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </div>
+      </div>
 
-                if (session) {
-                    window.location.href = 'dashboard.html';
-                }
-            } catch (error) {
-                console.error('Erro ao verificar sessão:', error.message);
-                // Não exibe erro para o usuário, apenas loga
-            }
+      <div class="form-group">
+        <label for="senha">Senha</label>
+        <div class="input-wrap">
+          <input
+            type="password"
+            id="senha"
+            name="senha"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            required
+          />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <button
+            type="button"
+            class="toggle-pw"
+            id="toggle-senha"
+            aria-label="Mostrar/ocultar senha"
+            tabindex="-1"
+          >
+            <!-- olho aberto -->
+            <svg id="icon-eye-open" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <!-- olho fechado (oculto por padrão) -->
+            <svg id="icon-eye-closed" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+              <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-login" id="btn-entrar">
+        <div class="spinner" aria-hidden="true"></div>
+        <span class="btn-text">Entrar</span>
+      </button>
+
+    </form>
+
+    <div class="card-footer">
+      <span>Fazenda da Esperança Formação</span> &mdash; Área restrita
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       Supabase + Lógica de Login
+  ══════════════════════════════════════════ -->
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    /* ── Configuração ── */
+    const SUPABASE_URL = 'COLE_SUA_URL';
+    const SUPABASE_KEY = 'COLE_SUA_CHAVE';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    /* ── Elementos ── */
+    const form        = document.getElementById('form-login');
+    const emailInput  = document.getElementById('email');
+    const senhaInput  = document.getElementById('senha');
+    const btnEntrar   = document.getElementById('btn-entrar');
+    const erroBox     = document.getElementById('erro-login');
+    const erroMsg     = document.getElementById('erro-login-msg');
+    const sucessoBox  = document.getElementById('sucesso-login');
+    const toggleSenha = document.getElementById('toggle-senha');
+    const iconOpen    = document.getElementById('icon-eye-open');
+    const iconClosed  = document.getElementById('icon-eye-closed');
+
+    /* ── Helpers ── */
+    function setLoading(state) {
+      btnEntrar.disabled = state;
+      btnEntrar.classList.toggle('loading', state);
+    }
+
+    function showError(msg) {
+      erroMsg.textContent = msg || 'Erro inesperado. Tente novamente.';
+      erroBox.classList.add('show');
+      sucessoBox.classList.remove('show');
+    }
+
+    function hideAlerts() {
+      erroBox.classList.remove('show');
+      sucessoBox.classList.remove('show');
+    }
+
+    function showSuccess() {
+      sucessoBox.classList.add('show');
+      erroBox.classList.remove('show');
+    }
+
+    function mapError(error) {
+      if (!error) return 'Erro desconhecido.';
+      const msg = error.message?.toLowerCase() || '';
+      if (msg.includes('invalid login') || msg.includes('invalid credentials'))
+        return 'E-mail ou senha incorretos. Verifique e tente novamente.';
+      if (msg.includes('email not confirmed'))
+        return 'Confirme seu e-mail antes de acessar.';
+      if (msg.includes('too many requests'))
+        return 'Muitas tentativas. Aguarde alguns minutos.';
+      if (msg.includes('network') || msg.includes('fetch'))
+        return 'Erro de conexão. Verifique sua internet.';
+      return error.message || 'Erro ao fazer login.';
+    }
+
+    /* ── Toggle visibilidade senha ── */
+    toggleSenha.addEventListener('click', () => {
+      const isPassword = senhaInput.type === 'password';
+      senhaInput.type = isPassword ? 'text' : 'password';
+      iconOpen.style.display   = isPassword ? 'none'  : 'block';
+      iconClosed.style.display = isPassword ? 'block' : 'none';
+      toggleSenha.setAttribute('aria-label', isPassword ? 'Ocultar senha' : 'Mostrar senha');
+    });
+
+    /* ── Verificar sessão existente ── */
+    (async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          window.location.replace('dashboard.html');
+        }
+      } catch (err) {
+        /* silencioso — apenas não redireciona */
+        console.warn('Verificação de sessão falhou:', err);
+      }
+    })();
+
+    /* ── Submit ── */
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlerts();
+
+      const email = emailInput.value.trim();
+      const senha = senhaInput.value;
+
+      /* Validação básica client-side */
+      if (!email) {
+        showError('Informe seu e-mail.');
+        emailInput.focus();
+        return;
+      }
+      if (!senha) {
+        showError('Informe sua senha.');
+        senhaInput.focus();
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password: senha,
+        });
+
+        if (error) {
+          showError(mapError(error));
+          senhaInput.value = '';
+          senhaInput.focus();
+          return;
         }
 
-        // Chama a verificação da sessão ao carregar a página
-        checkSession();
+        if (data?.session) {
+          showSuccess();
+          setTimeout(() => {
+            window.location.replace('dashboard.html');
+          }, 800);
+        } else {
+          showError('Não foi possível iniciar a sessão. Tente novamente.');
+        }
 
-        // Event listener para o formulário de login
-        loginForm.addEventListener('submit', async (event) => {
-            event.preventDefault(); // Previne o recarregamento da página
+      } catch (err) {
+        showError(mapError(err));
+      } finally {
+        setLoading(false);
+      }
+    });
 
-            erroLoginDiv.style.display = 'none'; // Esconde mensagens de erro anteriores
-            erroLoginDiv.textContent = ''; // Limpa o texto do erro
+    /* ── Limpar erro ao digitar ── */
+    [emailInput, senhaInput].forEach(el => {
+      el.addEventListener('input', hideAlerts);
+    });
+  </script>
 
-            const email = emailInput.value;
-            const password = passwordInput.value;
-
-            try {
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email: email,
-                    password: password,
-                });
-
-                if (error) {
-                    throw error;
-                }
-
-                if (data.session) {
-                    window.location.href = 'dashboard.html'; // Redireciona em caso de sucesso
-                } else {
-                    // Isso pode acontecer se signInWithPassword retornar data sem session e sem error (raro)
-                    erroLoginDiv.textContent = 'Ocorreu um erro inesperado. Tente novamente.';
-                    erroLoginDiv.style.display = 'block';
-                }
-
-            } catch (error) {
-                console.error('Erro de login:', error.message);
-                erroLoginDiv.textContent = `Erro ao fazer login: ${error.message || 'Credenciais inválidas.'}`;
-                erroLoginDiv.style.display = 'block';
-            }
-        });
-    </script>
 </body>
 </html>
