@@ -1,325 +1,838 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Usuários | Fazenda da Esperança Formação</title>
-    <!--
-        Este é apenas o HTML. Para o layout e estilo, você precisaria de um arquivo CSS.
-        Exemplo: <link rel="stylesheet" href="admin.css">
-        Para ícones (como editar/excluir), você pode usar Font Awesome ou similar.
-        Exemplo: <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    -->
-    <style>
-        /* Estilos básicos para demonstração do layout - REMOVA E USE UM CSS EXTERNO */
-        body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f7f6; }
-        .admin-wrapper { display: flex; min-height: 100vh; }
-        .sidebar { width: 250px; background-color: #2c3e50; color: white; padding: 20px; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
-        .sidebar-header { margin-bottom: 30px; text-align: center; }
-        .sidebar-header h3 { margin: 0; color: #ecf0f1; }
-        .sidebar-nav ul { list-style: none; padding: 0; margin: 0; }
-        .sidebar-nav li { margin-bottom: 10px; }
-        .sidebar-nav a { color: #ecf0f1; text-decoration: none; display: block; padding: 10px 15px; border-radius: 5px; transition: background-color 0.3s; }
-        .sidebar-nav a:hover, .sidebar-nav a.active { background-color: #34495e; }
-        .main-content { flex-grow: 1; padding: 30px; }
-        .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .main-header h1 { margin: 0; color: #333; }
-        .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; transition: background-color 0.3s; }
-        .btn-primary { background-color: #28a745; color: white; }
-        .btn-primary:hover { background-color: #218838; }
-        .content-section { background-color: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .table-container { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #f8f8f8; font-weight: bold; color: #555; }
-        tr:hover { background-color: #f1f1f1; }
-        .user-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; vertical-align: middle; }
-        .btn-sm { padding: 6px 12px; font-size: 0.875rem; margin-right: 5px; }
-        .btn-edit { background-color: #007bff; color: white; }
-        .btn-edit:hover { background-color: #0056b3; }
-        .btn-delete { background-color: #dc3545; color: white; }
-        .btn-delete:hover { background-color: #c82333; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Usuários | Admin - Fazenda da Esperança Formação</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+  :root {
+    --primary: #2d6a4f;
+    --primary-dark: #1b4332;
+    --primary-light: #52b788;
+    --accent: #f4a261;
+    --accent-dark: #e76f51;
+    --bg: #f0f4f1;
+    --sidebar-bg: #1b4332;
+    --sidebar-width: 260px;
+    --white: #ffffff;
+    --gray-50: #f8fafb;
+    --gray-100: #f1f5f2;
+    --gray-200: #e2e8e4;
+    --gray-300: #cbd5ce;
+    --gray-400: #9aab9e;
+    --gray-500: #6b7c6f;
+    --gray-600: #4a5c50;
+    --gray-700: #374840;
+    --gray-800: #243028;
+    --gray-900: #141c17;
+    --danger: #e53e3e;
+    --danger-light: #fff5f5;
+    --success: #38a169;
+    --success-light: #f0fff4;
+    --warning: #d69e2e;
+    --warning-light: #fffff0;
+    --info: #3182ce;
+    --info-light: #ebf8ff;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow: 0 4px 16px rgba(0,0,0,0.10);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.14);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-lg: 18px;
+    --transition: all 0.22s cubic-bezier(.4,0,.2,1);
+  }
 
-        /* Estilos do Modal */
-        .modal {
-            display: none; /* Escondido por padrão */
-            position: fixed; /* Fica por cima de tudo */
-            z-index: 1000; /* Z-index alto */
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto; /* Habilita scroll se o conteúdo for muito grande */
-            background-color: rgba(0,0,0,0.4); /* Fundo semi-transparente */
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto; /* Centraliza o modal */
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            width: 90%;
-            max-width: 600px;
-            position: relative;
-        }
-        .close-button {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            cursor: pointer;
-        }
-        .close-button:hover,
-        .close-button:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
-        .form-group input[type="text"],
-        .form-group input[type="email"],
-        .form-group select {
-            width: calc(100% - 22px); /* Ajusta para padding e border */
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-        .form-actions { text-align: right; margin-top: 20px; }
-        .form-actions .btn { margin-left: 10px; }
-        .btn-secondary { background-color: #6c757d; color: white; }
-        .btn-secondary:hover { background-color: #5a6268; }
-    </style>
-</head>
-<body>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <div class="admin-wrapper">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h3>Fazenda da Esperança Formação</h3>
-            </div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="#" class="active">Usuários</a></li>
-                    <li><a href="cursos.html">Cursos</a></li>
-                    <li><a href="matriculas.html">Matrículas</a></li>
-                    <li><a href="configuracoes.html">Configurações</a></li>
-                    <li><a href="logout.html">Sair</a></li>
-                </ul>
-            </nav>
-        </aside>
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--gray-800);
+    min-height: 100vh;
+    display: flex;
+  }
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="main-header">
-                <h1>Usuários</h1>
-                <button class="btn btn-primary" id="btnConvidarUsuario">Convidar Usuário</button>
-            </header>
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: var(--sidebar-bg);
+    min-height: 100vh;
+    position: fixed;
+    left: 0; top: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    transition: var(--transition);
+    box-shadow: 4px 0 24px rgba(0,0,0,0.18);
+  }
 
-            <section class="content-section">
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Avatar</th>
-                                <th>Nome</th>
-                                <th>Email</th>
-                                <th>Perfil</th>
-                                <th>Status</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Dados de exemplo. Estes seriam preenchidos dinamicamente via JavaScript do Supabase. -->
-                            <!-- Exemplo de como os dados da tabela 'usuarios' do Supabase seriam renderizados: -->
-                            <tr>
-                                <td><img src="https://via.placeholder.com/40/007bff/ffffff?text=JS" alt="Avatar de João Silva" class="user-avatar"></td>
-                                <td>João Silva</td>
-                                <td>joao.silva@example.com</td>
-                                <td>Admin</td>
-                                <td>Ativo</td>
-                                <td>
-                                    <button class="btn btn-sm btn-edit" data-user-id="1">Editar</button>
-                                    <button class="btn btn-sm btn-delete" data-user-id="1">Excluir</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><img src="https://via.placeholder.com/40/28a745/ffffff?text=MO" alt="Avatar de Maria Oliveira" class="user-avatar"></td>
-                                <td>Maria Oliveira</td>
-                                <td>maria.oliveira@example.com</td>
-                                <td>Aluno</td>
-                                <td>Ativo</td>
-                                <td>
-                                    <button class="btn btn-sm btn-edit" data-user-id="2">Editar</button>
-                                    <button class="btn btn-sm btn-delete" data-user-id="2">Excluir</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><img src="https://via.placeholder.com/40/ffc107/333333?text=PS" alt="Avatar de Pedro Santos" class="user-avatar"></td>
-                                <td>Pedro Santos</td>
-                                <td>pedro.santos@example.com</td>
-                                <td>Professor</td>
-                                <td>Inativo</td>
-                                <td>
-                                    <button class="btn btn-sm btn-edit" data-user-id="3">Editar</button>
-                                    <button class="btn btn-sm btn-delete" data-user-id="3">Excluir</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><img src="https://via.placeholder.com/40/17a2b8/ffffff?text=AS" alt="Avatar de Ana Souza" class="user-avatar"></td>
-                                <td>Ana Souza</td>
-                                <td>ana.souza@example.com</td>
-                                <td>Aluno</td>
-                                <td>Pendente</td>
-                                <td>
-                                    <button class="btn btn-sm btn-edit" data-user-id="4">Editar</button>
-                                    <button class="btn btn-sm btn-delete" data-user-id="4">Excluir</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        </main>
-    </div>
+  .sidebar-logo {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
 
-    <!-- Modal de Edição de Usuário -->
-    <div id="editUserModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h2>Editar Usuário</h2>
-            <form id="editUserForm">
-                <input type="hidden" id="editUserId" name="id"> <!-- Campo oculto para o ID do usuário -->
+  .sidebar-logo .logo-icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, var(--primary-light), var(--accent));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
 
-                <div class="form-group">
-                    <label for="editUserAvatar">URL do Avatar:</label>
-                    <input type="text" id="editUserAvatar" name="avatar_url" placeholder="Ex: https://example.com/avatar.jpg">
-                </div>
-                <div class="form-group">
-                    <label for="editUserName">Nome:</label>
-                    <input type="text" id="editUserName" name="nome" required>
-                </div>
-                <div class="form-group">
-                    <label for="editUserEmail">Email:</label>
-                    <input type="email" id="editUserEmail" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="editUserProfile">Perfil:</label>
-                    <select id="editUserProfile" name="perfil">
-                        <option value="Admin">Admin</option>
-                        <option value="Professor">Professor</option>
-                        <option value="Aluno">Aluno</option>
-                        <option value="Voluntário">Voluntário</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="editUserStatus">Status:</label>
-                    <select id="editUserStatus" name="status">
-                        <option value="Ativo">Ativo</option>
-                        <option value="Inativo">Inativo</option>
-                        <option value="Pendente">Pendente</option>
-                    </select>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-                    <button type="button" class="btn btn-secondary close-button">Cancelar</button>
-                </div>
-            </form>
-        </div>
-    </div>
+  .sidebar-logo .logo-text {
+    display: flex; flex-direction: column;
+  }
 
-    <!--
-        Para a funcionalidade do modal (abrir/fechar), carregar dados do Supabase e salvar,
-        você precisará de JavaScript.
+  .sidebar-logo .logo-text span:first-child {
+    font-size: 13px; font-weight: 700;
+    color: var(--white); letter-spacing: 0.3px;
+    line-height: 1.2;
+  }
 
-        Exemplo de como você linkaria os scripts:
-        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-        <script src="users.js"></script>
+  .sidebar-logo .logo-text span:last-child {
+    font-size: 10px; font-weight: 400;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.8px; text-transform: uppercase;
+  }
 
-        No arquivo users.js, você teria a lógica:
-        1. Inicializar o cliente Supabase.
-        2. Função para carregar usuários da tabela 'usuarios' e preencher a tabela HTML.
-        3. Funções para abrir/fechar o modal de edição.
-        4. Funções para preencher o modal com os dados do usuário ao clicar em "Editar".
-        5. Função para enviar os dados do formulário de edição para o Supabase.
-        6. Funções para lidar com o botão "Convidar Usuário" (provavelmente abrindo um modal similar para criação).
-        7. Funções para lidar com o botão "Excluir".
-    -->
-    <script>
-        // Exemplo de JavaScript básico para o modal (você deve mover isso para um arquivo JS externo)
-        const editUserModal = document.getElementById('editUserModal');
-        const closeButtons = document.querySelectorAll('.close-button');
-        const editButtons = document.querySelectorAll('.btn-edit');
-        const btnConvidarUsuario = document.getElementById('btnConvidarUsuario');
+  .sidebar-nav {
+    flex: 1;
+    padding: 16px 12px;
+    overflow-y: auto;
+  }
 
-        // Função para abrir o modal
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex'; // Usar flex para centralizar
-        }
+  .nav-section-label {
+    font-size: 10px; font-weight: 600;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 12px 12px 6px;
+    margin-top: 8px;
+  }
 
-        // Função para fechar o modal
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
+  .nav-item {
+    display: flex; align-items: center; gap: 11px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    font-size: 13.5px; font-weight: 500;
+    transition: var(--transition);
+    margin-bottom: 2px;
+    cursor: pointer;
+    position: relative;
+  }
 
-        // Event listeners para fechar o modal
-        closeButtons.forEach(button => {
-            button.addEventListener('click', () => closeModal('editUserModal'));
-        });
+  .nav-item:hover {
+    background: rgba(255,255,255,0.08);
+    color: var(--white);
+  }
 
-        // Fechar modal clicando fora
-        window.addEventListener('click', (event) => {
-            if (event.target == editUserModal) {
-                closeModal('editUserModal');
-            }
-        });
+  .nav-item.active {
+    background: linear-gradient(90deg, rgba(82,183,136,0.22), rgba(82,183,136,0.08));
+    color: var(--primary-light);
+    font-weight: 600;
+  }
 
-        // Event listener para o botão "Convidar Usuário"
-        btnConvidarUsuario.addEventListener('click', () => {
-            // Aqui você pode limpar o formulário e abrir o modal para um novo usuário
-            document.getElementById('editUserForm').reset(); // Limpa o formulário
-            document.getElementById('editUserId').value = ''; // Garante que o ID esteja vazio para nova criação
-            document.querySelector('#editUserModal h2').textContent = 'Convidar Novo Usuário'; // Muda o título
-            openModal('editUserModal');
-        });
+  .nav-item.active::before {
+    content: '';
+    position: absolute; left: 0; top: 20%; bottom: 20%;
+    width: 3px;
+    background: var(--primary-light);
+    border-radius: 0 3px 3px 0;
+  }
 
-        // Event listeners para os botões "Editar"
-        editButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const userId = button.dataset.userId;
-                // Em um cenário real, você buscaria os dados do usuário pelo userId do Supabase
-                // Por agora, vamos preencher com dados de exemplo baseados no ID
-                const row = button.closest('tr');
-                document.getElementById('editUserId').value = userId;
-                document.getElementById('editUserAvatar').value = row.cells[0].querySelector('img').src;
-                document.getElementById('editUserName').value = row.cells[1].textContent;
-                document.getElementById('editUserEmail').value = row.cells[2].textContent;
-                document.getElementById('editUserProfile').value = row.cells[3].textContent;
-                document.getElementById('editUserStatus').value = row.cells[4].textContent;
+  .nav-item i { width: 18px; text-align: center; font-size: 14px; }
 
-                document.querySelector('#editUserModal h2').textContent = 'Editar Usuário'; // Restaura o título
-                openModal('editUserModal');
-            });
-        });
+  .nav-badge {
+    margin-left: auto;
+    background: var(--accent);
+    color: var(--white);
+    font-size: 10px; font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 20px;
+  }
 
-        // Event listener para o formulário de edição (apenas para demonstração)
-        document.getElementById('editUserForm').addEventListener('submit', (event) => {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            const userData = Object.fromEntries(formData.entries());
-            console.log('Dados do usuário a serem salvos (via Supabase):', userData);
-            alert('Dados salvos no console! (Em um ambiente real, seriam enviados ao Supabase)');
-            closeModal('editUserModal');
-            // Aqui você chamaria sua função Supabase para atualizar ou inserir o usuário
-        });
-    </script>
-</body>
-</html>
+  .sidebar-footer {
+    padding: 16px 12px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .sidebar-user {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .sidebar-user:hover { background: rgba(255,255,255,0.07); }
+
+  .sidebar-user .user-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-light), var(--accent));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: var(--white);
+    flex-shrink: 0;
+  }
+
+  .sidebar-user .user-info { flex: 1; min-width: 0; }
+  .sidebar-user .user-info span { display: block; }
+  .sidebar-user .user-info .u-name {
+    font-size: 12.5px; font-weight: 600; color: var(--white);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .sidebar-user .user-info .u-role {
+    font-size: 10.5px; color: rgba(255,255,255,0.45);
+  }
+  .sidebar-user i { color: rgba(255,255,255,0.35); font-size: 12px; }
+
+  /* ─── MAIN ─── */
+  .main {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* ─── TOPBAR ─── */
+  .topbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 0 32px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky; top: 0; z-index: 50;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .topbar-left {
+    display: flex; align-items: center; gap: 16px;
+  }
+
+  .topbar-left h1 {
+    font-size: 18px; font-weight: 700;
+    color: var(--gray-800);
+  }
+
+  .breadcrumb {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--gray-400);
+  }
+
+  .breadcrumb span:last-child { color: var(--primary); font-weight: 500; }
+  .breadcrumb i { font-size: 9px; }
+
+  .topbar-right {
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .topbar-btn {
+    width: 38px; height: 38px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-200);
+    background: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: var(--gray-500);
+    transition: var(--transition);
+    position: relative;
+  }
+
+  .topbar-btn:hover {
+    background: var(--gray-50);
+    color: var(--primary);
+    border-color: var(--primary-light);
+  }
+
+  .notif-dot {
+    position: absolute; top: 7px; right: 7px;
+    width: 7px; height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    border: 1.5px solid var(--white);
+  }
+
+  /* ─── CONTENT ─── */
+  .content {
+    padding: 28px 32px;
+    flex: 1;
+  }
+
+  /* ─── PAGE HEADER ─── */
+  .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .page-header-left h2 {
+    font-size: 22px; font-weight: 800;
+    color: var(--gray-900);
+    margin-bottom: 4px;
+  }
+
+  .page-header-left p {
+    font-size: 13.5px; color: var(--gray-500);
+  }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 13.5px; font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: var(--transition);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--white);
+    box-shadow: 0 2px 10px rgba(45,106,79,0.3);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, var(--primary-light), var(--primary));
+    box-shadow: 0 4px 16px rgba(45,106,79,0.4);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: var(--white);
+    color: var(--gray-700);
+    border: 1.5px solid var(--gray-200);
+  }
+
+  .btn-secondary:hover {
+    background: var(--gray-50);
+    border-color: var(--gray-300);
+  }
+
+  .btn-danger {
+    background: var(--danger);
+    color: var(--white);
+  }
+
+  .btn-danger:hover {
+    background: #c53030;
+    transform: translateY(-1px);
+  }
+
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .btn-icon {
+    padding: 7px 10px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--gray-200);
+    background: var(--white);
+    color: var(--gray-500);
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex; align-items: center;
+    font-size: 13px;
+  }
+
+  .btn-icon:hover {
+    background: var(--gray-50);
+    color: var(--primary);
+    border-color: var(--primary-light);
+  }
+
+  .btn-icon.danger:hover {
+    background: var(--danger-light);
+    color: var(--danger);
+    border-color: #feb2b2;
+  }
+
+  /* ─── STATS CARDS ─── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    border: 1px solid var(--gray-200);
+    display: flex; align-items: center; gap: 14px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+  }
+
+  .stat-card:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+  }
+
+  .stat-icon {
+    width: 46px; height: 46px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .stat-icon.green { background: var(--success-light); color: var(--success); }
+  .stat-icon.blue { background: var(--info-light); color: var(--info); }
+  .stat-icon.orange { background: #fff7ed; color: var(--accent-dark); }
+  .stat-icon.red { background: var(--danger-light); color: var(--danger); }
+
+  .stat-info { flex: 1; }
+  .stat-info .stat-val {
+    font-size: 22px; font-weight: 800; color: var(--gray-900);
+    line-height: 1;
+  }
+  .stat-info .stat-label {
+    font-size: 11.5px; color: var(--gray-400); margin-top: 3px;
+    font-weight: 500;
+  }
+
+  /* ─── TOOLBAR ─── */
+  .toolbar {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .search-box {
+    position: relative;
+    flex: 1;
+    min-width: 220px;
+  }
+
+  .search-box i {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    color: var(--gray-400); font-size: 13px;
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 9px 12px 9px 36px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-size: 13.5px;
+    color: var(--gray-700);
+    background: var(--gray-50);
+    outline: none;
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+  }
+
+  .search-box input:focus {
+    border-color: var(--primary-light);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(82,183,136,0.12);
+  }
+
+  .filter-select {
+    padding: 9px 32px 9px 12px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    color: var(--gray-700);
+    background: var(--gray-50);
+    outline: none;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7c6f' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+  }
+
+  .filter-select:focus {
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(82,183,136,0.12);
+  }
+
+  .toolbar-right {
+    display: flex; align-items: center; gap: 8px;
+    margin-left: auto;
+  }
+
+  /* ─── TABLE CARD ─── */
+  .table-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+
+  .table-card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--gray-100);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .table-card-header h3 {
+    font-size: 14px; font-weight: 700; color: var(--gray-800);
+  }
+
+  .table-card-header span {
+    font-size: 12px; color: var(--gray-400);
+  }
+
+  .table-wrap { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    background: var(--gray-50);
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px; font-weight: 700;
+    color: var(--gray-500);
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--gray-200);
+    white-space: nowrap;
+  }
+
+  thead th:first-child { padding-left: 20px; }
+  thead th:last-child { padding-right: 20px; text-align: center; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--gray-100);
+    transition: var(--transition);
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+
+  tbody tr:hover { background: var(--gray-50); }
+
+  tbody td {
+    padding: 14px 16px;
+    font-size: 13.5px;
+    color: var(--gray-700);
+    vertical-align: middle;
+  }
+
+  tbody td:first-child { padding-left: 20px; }
+  tbody td:last-child { padding-right: 20px; }
+
+  /* ─── AVATAR ─── */
+  .user-cell {
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 2px solid var(--gray-200);
+  }
+
+  .avatar-fallback {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    color: var(--white);
+    flex-shrink: 0;
+    border: 2px solid transparent;
+  }
+
+  .user-cell-info .u-name {
+    font-size: 13.5px; font-weight: 600; color: var(--gray-800);
+    line-height: 1.2;
+  }
+
+  .user-cell-info .u-id {
+    font-size: 11px; color: var(--gray-400); margin-top: 1px;
+  }
+
+  /* ─── BADGES ─── */
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11.5px; font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .badge-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+  }
+
+  .badge-active { background: var(--success-light); color: var(--success); }
+  .badge-active .badge-dot { background: var(--success); }
+
+  .badge-inactive { background: var(--gray-100); color: var(--gray-500); }
+  .badge-inactive .badge-dot { background: var(--gray-400); }
+
+  .badge-pending { background: var(--warning-light); color: var(--warning); }
+  .badge-pending .badge-dot { background: var(--warning); }
+
+  .badge-blocked { background: var(--danger-light); color: var(--danger); }
+  .badge-blocked .badge-dot { background: var(--danger); }
+
+  .role-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 11.5px; font-weight: 600;
+  }
+
+  .role-admin { background: #f3e8ff; color: #7c3aed; }
+  .role-coordenador { background: #dbeafe; color: #1d4ed8; }
+  .role-formador { background: #dcfce7; color: #15803d; }
+  .role-aluno { background: #fff7ed; color: #c2410c; }
+  .role-visitante { background: var(--gray-100); color: var(--gray-600); }
+
+  /* ─── ACTIONS ─── */
+  .actions-cell {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+
+  /* ─── EMPTY STATE ─── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .empty-state i {
+    font-size: 48px;
+    color: var(--gray-300);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .empty-state h3 {
+    font-size: 16px; font-weight: 700;
+    color: var(--gray-600);
+    margin-bottom: 6px;
+  }
+
+  .empty-state p {
+    font-size: 13.5px; color: var(--gray-400);
+  }
+
+  /* ─── PAGINATION ─── */
+  .pagination-bar {
+    padding: 14px 20px;
+    border-top: 1px solid var(--gray-100);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+
+  .pagination-info {
+    font-size: 12.5px; color: var(--gray-400);
+  }
+
+  .pagination-btns {
+    display: flex; align-items: center; gap: 4px;
+  }
+
+  .page-btn {
+    width: 32px; height: 32px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--gray-200);
+    background: var(--white);
+    color: var(--gray-600);
+    font-size: 13px; font-weight: 500;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+  }
+
+  .page-btn:hover {
+    border-color: var(--primary-light);
+    color: var(--primary);
+    background: var(--gray-50);
+  }
+
+  .page-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
+  }
+
+  .page-btn:disabled {
+    opacity: 0.4; cursor: not-allowed;
+  }
+
+  /* ─── LOADING ─── */
+  .loading-row td {
+    text-align: center;
+    padding: 48px;
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 32px; height: 32px;
+    border: 3px solid var(--gray-200);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ─── MODAL OVERLAY ─── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(20,28,23,0.55);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.22s ease;
+  }
+
+  .modal-overlay.open {
+    opacity: 1; pointer-events: all;
+  }
+
+  .modal {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 540px;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(20px) scale(0.97);
+    transition: transform 0.22s cubic-bezier(.4,0,.2,1);
+    overflow: hidden;
+  }
+
+  .modal-overlay.open .modal {
+    transform: translateY(0) scale(1);
+  }
+
+  .modal-header {
+    padding: 22px 24px 18px;
+    border-bottom: 1px solid var(--gray-100);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .modal-header-left {
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .modal-header-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+  }
+
+  .modal-header-icon.edit { background: var(--info-light); color: var(--info); }
+  .modal-header-icon.invite { background: var(--success-light); color: var(--success); }
+  .modal-header-icon.delete { background: var(--danger-light); color: var(--danger); }
+
+  .modal-header h3 {
+    font-size: 16px; font-weight: 700; color: var(--gray-900);
+  }
+
+  .modal-header p {
+    font-size: 12px; color: var(--gray-400); margin-top: 1px;
+  }
+
+  .modal-close {
+    width: 32px; height: 32px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--gray-200);
+    background: var(--white);
+    color: var(--gray-400);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    transition: var(--transition);
+  }
+
+  .modal-close:hover {
+    background: var(--gray-50);
+    color: var(--gray-700);
+    border-color: var(--gray-300);
+  }
+
+  .modal-body {
+    padding: 22px 24px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  .modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--gray-100);
+    display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+  }
+
+  /* ─── FORM ─── */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-grid .full { grid-column: 1 / -1; }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .form-group label {
+    font-size: 12.5px; font-weight: 600;
+    color: var(--gray-600);
+  }
+
+  .form-group label .req { color: var(--danger); margin-left: 2px; }
+
+  .form-control {
+    padding: 9px 12px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-size: 13.5px;
+    color: var(--gray-800);
+    background: var(--gray-50);
+    outline: none;
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+    width: 100%;
+  }
+
+  .form-control:focus {
+    border-color: var(--primary-light);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(82,183,136,0.12);
+  }
+
+  select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg
