@@ -1,567 +1,938 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Fazenda da Esperança Formação</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        :root {
-            --primary-color: #007bff;
-            --secondary-color: #6c757d;
-            --background-color: #f8f9fa;
-            --text-color: #212529;
-            --sidebar-bg: #343a40;
-            --sidebar-text: #f8f9fa;
-            --sidebar-active: #0056b3;
-            --header-bg: #ffffff;
-            --border-color: #dee2e6;
-            --font-family: 'Roboto', sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Configurações - Fazenda da Esperança Formação</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root {
+    --primary: #2d6a4f;
+    --primary-dark: #1b4332;
+    --primary-light: #52b788;
+    --accent: #f4a261;
+    --accent-dark: #e76f51;
+    --bg: #f0f4f1;
+    --sidebar-bg: #1b4332;
+    --sidebar-text: #d8f3dc;
+    --sidebar-active: #2d6a4f;
+    --card-bg: #ffffff;
+    --text: #1a1a2e;
+    --text-muted: #6c757d;
+    --border: #dee2e6;
+    --success: #40916c;
+    --error: #d62828;
+    --warning: #f4a261;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --radius: 12px;
+  }
 
-        body {
-            font-family: var(--font-family);
-            margin: 0;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            display: flex;
-            min-height: 100vh;
-        }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        #sidebar {
-            width: 250px;
-            background-color: var(--sidebar-bg);
-            color: var(--sidebar-text);
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-        }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    min-height: 100vh;
+  }
 
-        #sidebar .logo {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 1.5em;
-            font-weight: 700;
-            color: #ffffff;
-        }
+  /* SIDEBAR */
+  .sidebar {
+    width: 260px;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh;
+    z-index: 100;
+    transition: transform 0.3s ease;
+  }
 
-        #sidebar nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+  .sidebar-logo {
+    padding: 24px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
 
-        #sidebar nav ul li {
-            margin-bottom: 10px;
-        }
+  .sidebar-logo .logo-icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, var(--primary-light), var(--accent));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
 
-        #sidebar nav ul li a {
-            display: block;
-            color: var(--sidebar-text);
-            text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
+  .sidebar-logo .logo-text {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #fff;
+  }
 
-        #sidebar nav ul li a:hover {
-            background-color: #495057;
-        }
+  .sidebar-logo .logo-sub {
+    font-size: 10px;
+    color: var(--primary-light);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 
-        #sidebar nav ul li a.active {
-            background-color: var(--primary-color);
-            color: #ffffff;
-        }
+  .sidebar-nav {
+    flex: 1;
+    padding: 16px 0;
+    overflow-y: auto;
+  }
 
-        #main-content {
-            flex-grow: 1;
-            padding: 30px;
-            background-color: #ffffff;
-            border-left: 1px solid var(--border-color);
-            overflow-y: auto;
-        }
+  .nav-section-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.4);
+    padding: 12px 20px 6px;
+  }
 
-        h1 {
-            color: var(--primary-color);
-            margin-bottom: 30px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 15px;
-        }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    font-size: 14px;
+  }
 
-        .tab-content .tab-pane {
-            display: none;
-        }
+  .nav-item:hover {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+  }
 
-        .tab-content .tab-pane.active {
-            display: block;
-        }
+  .nav-item.active {
+    background: rgba(255,255,255,0.12);
+    border-left-color: var(--primary-light);
+    color: #fff;
+  }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+  .nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 700;
-            color: var(--text-color);
-        }
+  .sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+  }
 
-        .form-group input[type="text"],
-        .form-group input[type="email"],
-        .form-group input[type="tel"],
-        .form-group input[type="url"],
-        .form-group select,
-        .form-group textarea {
-            width: calc(100% - 22px);
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            font-size: 1em;
-            box-sizing: border-box;
-            background-color: #fdfdfd;
-        }
+  /* MAIN */
+  .main {
+    margin-left: 260px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
 
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
+  .topbar {
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: var(--shadow);
+  }
 
-        .form-group input[type="color"] {
-            width: 80px;
-            height: 40px;
-            padding: 0;
-            border: none;
-            cursor: pointer;
-            vertical-align: middle;
-        }
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
 
-        button[type="submit"] {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1.1em;
-            transition: background-color 0.3s ease;
-            margin-top: 20px;
-        }
+  .topbar-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-dark);
+  }
 
-        button[type="submit"]:hover {
-            background-color: var(--sidebar-active);
-        }
+  .topbar-badge {
+    background: var(--primary-light);
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
 
-        .preview-box {
-            border: 1px solid var(--border-color);
-            padding: 20px;
-            margin-top: 20px;
-            border-radius: 8px;
-            background-color: var(--background-color);
-            color: var(--text-color);
-        }
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
 
-        .preview-box h3 {
-            margin-top: 0;
-            color: var(--primary-color);
-        }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
 
-        .preview-box p {
-            margin-bottom: 10px;
-        }
+  .btn-primary {
+    background: var(--primary);
+    color: #fff;
+  }
 
-        .preview-box .sample-button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 5px;
-            text-decoration: none;
-            margin-top: 10px;
-        }
+  .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
 
-        #status-message {
-            margin-top: 20px;
-            padding: 10px 15px;
-            border-radius: 5px;
-            display: none;
-            font-weight: bold;
-        }
+  .btn-outline {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--text-muted);
+  }
 
-        #status-message.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
+  .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
 
-        #status-message.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-    </style>
+  .btn-danger {
+    background: var(--error);
+    color: #fff;
+  }
+
+  .btn-danger:hover { background: #b71c1c; }
+
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  /* CONTENT */
+  .content {
+    padding: 32px;
+    flex: 1;
+  }
+
+  /* TABS */
+  .tabs-wrapper {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .tabs-header {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    background: #f8faf9;
+    overflow-x: auto;
+  }
+
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 22px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+  }
+
+  .tab-btn:hover { color: var(--primary); background: rgba(45,106,79,0.05); }
+
+  .tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+    background: #fff;
+    font-weight: 600;
+  }
+
+  .tab-btn .tab-icon { font-size: 16px; }
+
+  .tabs-body { padding: 32px; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* FORM ELEMENTS */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .form-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
+
+  .form-full { grid-column: 1 / -1; }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .form-label .label-badge {
+    font-size: 10px;
+    background: var(--accent);
+    color: #fff;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--text);
+    background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit;
+  }
+
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(45,106,79,0.12);
+  }
+
+  .form-textarea { resize: vertical; min-height: 90px; }
+
+  .form-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* SECTION DIVIDER */
+  .section-divider {
+    margin: 28px 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-divider h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--primary-dark);
+  }
+
+  .section-divider .divider-icon { font-size: 18px; }
+
+  /* SOCIAL CARD */
+  .social-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .social-card {
+    background: #f8faf9;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: border-color 0.2s;
+  }
+
+  .social-card:hover { border-color: var(--primary-light); }
+
+  .social-icon {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .social-icon.facebook { background: #e8f0fe; }
+  .social-icon.instagram { background: #fce4ec; }
+  .social-icon.youtube { background: #ffebee; }
+  .social-icon.twitter { background: #e3f2fd; }
+  .social-icon.linkedin { background: #e8f5e9; }
+  .social-icon.tiktok { background: #f3e5f5; }
+  .social-icon.whatsapp { background: #e8f5e9; }
+  .social-icon.telegram { background: #e3f2fd; }
+
+  .social-input-wrap { flex: 1; }
+  .social-name { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
+
+  /* SEO PREVIEW */
+  .seo-preview {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 16px;
+  }
+
+  .seo-preview-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .seo-google-preview {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+  }
+
+  .seo-google-url {
+    font-size: 12px;
+    color: #006621;
+    margin-bottom: 2px;
+  }
+
+  .seo-google-title {
+    font-size: 18px;
+    color: #1a0dab;
+    margin-bottom: 4px;
+    cursor: pointer;
+  }
+
+  .seo-google-title:hover { text-decoration: underline; }
+
+  .seo-google-desc {
+    font-size: 13px;
+    color: #545454;
+    line-height: 1.5;
+  }
+
+  /* INTEGRATION CARDS */
+  .integration-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .integration-card {
+    background: #f8faf9;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .integration-card:hover {
+    border-color: var(--primary-light);
+    box-shadow: 0 4px 16px rgba(45,106,79,0.1);
+  }
+
+  .integration-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .integration-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .integration-logo {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+
+  .int-ga { background: #fff3e0; }
+  .int-pixel { background: #e8eaf6; }
+  .int-wa { background: #e8f5e9; }
+  .int-recaptcha { background: #fce4ec; }
+
+  .integration-name { font-size: 15px; font-weight: 700; color: var(--text); }
+  .integration-desc { font-size: 12px; color: var(--text-muted); }
+
+  /* TOGGLE */
+  .toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .toggle {
+    position: relative;
+    width: 44px; height: 24px;
+    cursor: pointer;
+  }
+
+  .toggle input { opacity: 0; width: 0; height: 0; }
+
+  .toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #ccc;
+    border-radius: 24px;
+    transition: 0.3s;
+  }
+
+  .toggle-slider:before {
+    content: '';
+    position: absolute;
+    width: 18px; height: 18px;
+    left: 3px; bottom: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: 0.3s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  }
+
+  .toggle input:checked + .toggle-slider { background: var(--primary); }
+  .toggle input:checked + .toggle-slider:before { transform: translateX(20px); }
+
+  .toggle-label { font-size: 13px; font-weight: 500; color: var(--text-muted); }
+
+  /* COLOR PICKER */
+  .color-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .color-card {
+    background: #f8faf9;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: border-color 0.2s;
+  }
+
+  .color-card:hover { border-color: var(--primary-light); }
+
+  .color-picker-wrap {
+    position: relative;
+    width: 44px; height: 44px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    flex-shrink: 0;
+  }
+
+  .color-picker-wrap input[type="color"] {
+    position: absolute;
+    inset: -4px;
+    width: calc(100% + 8px);
+    height: calc(100% + 8px);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .color-info { flex: 1; }
+  .color-name { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .color-value { font-size: 11px; color: var(--text-muted); font-family: monospace; }
+
+  /* THEME PREVIEW */
+  .theme-preview {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .preview-topbar {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 12px;
+  }
+
+  .preview-logo-dot {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+  }
+
+  .preview-logo-text {
+    height: 12px;
+    width: 120px;
+    border-radius: 4px;
+    opacity: 0.7;
+  }
+
+  .preview-nav-items {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+  }
+
+  .preview-nav-item {
+    height: 10px;
+    width: 50px;
+    border-radius: 4px;
+    opacity: 0.5;
+  }
+
+  .preview-body {
+    display: flex;
+    height: 160px;
+  }
+
+  .preview-sidebar {
+    width: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 0;
+    gap: 8px;
+  }
+
+  .preview-sidebar-item {
+    width: 36px; height: 8px;
+    border-radius: 4px;
+    opacity: 0.4;
+  }
+
+  .preview-sidebar-item.active { opacity: 1; }
+
+  .preview-main {
+    flex: 1;
+    padding: 16px;
+    background: #f8faf9;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .preview-card {
+    background: #fff;
+    border-radius: 8px;
+    height: 40px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  .preview-card-dot {
+    width: 20px; height: 20px;
+    border-radius: 4px;
+  }
+
+  .preview-card-line {
+    height: 8px;
+    border-radius: 4px;
+    flex: 1;
+    opacity: 0.3;
+  }
+
+  .preview-btn-demo {
+    height: 28px;
+    width: 70px;
+    border-radius: 6px;
+    margin-left: auto;
+  }
+
+  /* FONT SELECTOR */
+  .font-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .font-option {
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .font-option:hover { border-color: var(--primary-light); }
+  .font-option.selected { border-color: var(--primary); background: rgba(45,106,79,0.05); }
+
+  .font-sample { font-size: 22px; margin-bottom: 4px; }
+  .font-label { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+
+  /* ALERT */
+  .alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .alert-success { background: #d8f3dc; color: #1b4332; border: 1px solid #b7e4c7; }
+  .alert-error { background: #ffebee; color: #b71c1c; border: 1px solid #ffcdd2; }
+  .alert-info { background: #e3f2fd; color: #0d47a1; border: 1px solid #bbdefb; }
+
+  /* LOADING */
+  .loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(4px);
+  }
+
+  .loading-spinner {
+    width: 48px; height: 48px;
+    border: 4px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text {
+    margin-top: 12px;
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .loading-wrap { display: flex; flex-direction: column; align-items: center; }
+
+  /* SAVE BAR */
+  .save-bar {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    z-index: 200;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+
+  .save-bar.visible { transform: translateY(0); opacity: 1; }
+
+  .save-bar-text { font-size: 13px; color: var(--text-muted); }
+  .save-bar-dot { width: 8px; height: 8px; background: var(--warning); border-radius: 50%; }
+
+  /* CHAR COUNTER */
+  .char-counter {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: right;
+    margin-top: 2px;
+  }
+
+  .char-counter.warn { color: var(--warning); }
+  .char-counter.over { color: var(--error); }
+
+  /* UPLOAD AREA */
+  .upload-area {
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #fafafa;
+  }
+
+  .upload-area:hover { border-color: var(--primary); background: rgba(45,106,79,0.03); }
+  .upload-area.dragover { border-color: var(--primary); background: rgba(45,106,79,0.08); }
+
+  .upload-icon { font-size: 32px; margin-bottom: 8px; }
+  .upload-text { font-size: 14px; color: var(--text-muted); }
+  .upload-hint { font-size: 12px; color: var(--text-muted); opacity: 0.7; margin-top: 4px; }
+
+  .logo-preview {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px;
+    background: #f0f4f1;
+    border-radius: 8px;
+    margin-top: 8px;
+  }
+
+  .logo-preview img {
+    width: 60px; height: 60px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #fff;
+    padding: 4px;
+  }
+
+  .logo-preview-info { flex: 1; }
+  .logo-preview-name { font-size: 13px; font-weight: 600; }
+  .logo-preview-size { font-size: 11px; color: var(--text-muted); }
+
+  /* BADGE STATUS */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+
+  .status-active { background: #d8f3dc; color: #1b4332; }
+  .status-inactive { background: #f5f5f5; color: #9e9e9e; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .form-grid, .form-grid-3, .social-grid, .integration-grid { grid-template-columns: 1fr; }
+    .font-grid { grid-template-columns: 1fr 1fr; }
+    .color-section { grid-template-columns: 1fr 1fr; }
+    .content { padding: 16px; }
+    .tabs-body { padding: 20px; }
+  }
+
+  .hamburger {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--text);
+    padding: 4px;
+  }
+
+  @media (max-width: 900px) { .hamburger { display: block; } }
+
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 99;
+  }
+
+  .sidebar-overlay.show { display: block; }
+</style>
 </head>
 <body>
-    <aside id="sidebar">
-        <div class="logo">
-            Fazenda da Esperança<br>Formação
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#empresa" class="tab-link active">Empresa</a></li>
-                <li><a href="#redes-sociais" class="tab-link">Redes Sociais</a></li>
-                <li><a href="#seo-global" class="tab-link">SEO Global</a></li>
-                <li><a href="#integracoes" class="tab-link">Integrações</a></li>
-                <li><a href="#aparencia" class="tab-link">Aparência</a></li>
-            </ul>
-        </nav>
-    </aside>
 
-    <main id="main-content">
-        <h1>Configurações do Admin</h1>
+<!-- Loading -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-wrap">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Carregando configurações...</div>
+  </div>
+</div>
 
-        <form id="admin-config-form">
-            <input type="hidden" id="config-id" name="id" value="1"> <!-- Assuming a single config row with ID 1 -->
+<!-- Sidebar Overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
-            <div class="tab-content">
-                <!-- Tab: Empresa -->
-                <div id="empresa" class="tab-pane active">
-                    <h2>Dados da Empresa</h2>
-                    <div class="form-group">
-                        <label for="nomeEmpresa">Nome da Empresa</label>
-                        <input type="text" id="nomeEmpresa" name="nomeEmpresa" placeholder="Nome completo da sua empresa">
-                    </div>
-                    <div class="form-group">
-                        <label for="descricaoCurta">Descrição Curta</label>
-                        <textarea id="descricaoCurta" name="descricaoCurta" placeholder="Uma breve descrição da empresa para uso geral (ex: meta descrição padrão)"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="endereco">Endereço</label>
-                        <input type="text" id="endereco" name="endereco" placeholder="Rua, número, bairro, cidade, estado, CEP">
-                    </div>
-                    <div class="form-group">
-                        <label for="telefone">Telefone</label>
-                        <input type="tel" id="telefone" name="telefone" placeholder="(XX) XXXX-XXXX">
-                    </div>
-                    <div class="form-group">
-                        <label for="emailContato">Email de Contato</label>
-                        <input type="email" id="emailContato" name="emailContato" placeholder="contato@empresa.com.br">
-                    </div>
-                    <div class="form-group">
-                        <label for="cnpj">CNPJ</label>
-                        <input type="text" id="cnpj" name="cnpj" placeholder="XX.XXX.XXX/XXXX-XX">
-                    </div>
-                    <div class="form-group">
-                        <label for="logoUrl">URL da Logo</label>
-                        <input type="url" id="logoUrl" name="logoUrl" placeholder="https://seusite.com/logo.png">
-                    </div>
-                    <div class="form-group">
-                        <label for="faviconUrl">URL do Favicon</label>
-                        <input type="url" id="faviconUrl" name="faviconUrl" placeholder="https://seusite.com/favicon.ico">
-                    </div>
-                </div>
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">🌿</div>
+    <div>
+      <div class="logo-text">Fazenda da Esperança</div>
+      <div class="logo-sub">Formação · Admin</div>
+    </div>
+  </div>
 
-                <!-- Tab: Redes Sociais -->
-                <div id="redes-sociais" class="tab-pane">
-                    <h2>Links de Redes Sociais</h2>
-                    <div class="form-group">
-                        <label for="facebookUrl">Facebook URL</label>
-                        <input type="url" id="facebookUrl" name="facebookUrl" placeholder="https://facebook.com/seuperfil">
-                    </div>
-                    <div class="form-group">
-                        <label for="instagramUrl">Instagram URL</label>
-                        <input type="url" id="instagramUrl" name="instagramUrl" placeholder="https://instagram.com/seuperfil">
-                    </div>
-                    <div class="form-group">
-                        <label for="youtubeUrl">YouTube URL</label>
-                        <input type="url" id="youtubeUrl" name="youtubeUrl" placeholder="https://youtube.com/seucanal">
-                    </div>
-                    <div class="form-group">
-                        <label for="linkedinUrl">LinkedIn URL</label>
-                        <input type="url" id="linkedinUrl" name="linkedinUrl" placeholder="https://linkedin.com/empresa/seuperfil">
-                    </div>
-                    <div class="form-group">
-                        <label for="whatsappLink">WhatsApp Link (API)</label>
-                        <input type="url" id="whatsappLink" name="whatsappLink" placeholder="https://wa.me/55XXYYYYYYYYY">
-                    </div>
-                    <div class="form-group">
-                        <label for="tiktokUrl">TikTok URL</label>
-                        <input type="url" id="tiktokUrl" name="tiktokUrl" placeholder="https://tiktok.com/@seuperfil">
-                    </div>
-                    <div class="form-group">
-                        <label for="twitterUrl">Twitter/X URL</label>
-                        <input type="url" id="twitterUrl" name="twitterUrl" placeholder="https://twitter.com/seuperfil">
-                    </div>
-                </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-title">Principal</div>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">📊</span> Dashboard
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">👥</span> Usuários
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">📚</span> Conteúdo
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">📅</span> Eventos
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">📝</span> Formulários
+    </a>
 
-                <!-- Tab: SEO Global -->
-                <div id="seo-global" class="tab-pane">
-                    <h2>Configurações de SEO Global</h2>
-                    <div class="form-group">
-                        <label for="metaTituloPadrao">Meta Título Padrão</label>
-                        <input type="text" id="metaTituloPadrao" name="metaTituloPadrao" placeholder="Título padrão para páginas sem título específico">
-                    </div>
-                    <div class="form-group">
-                        <label for="metaDescricaoPadrao">Meta Descrição Padrão</label>
-                        <textarea id="metaDescricaoPadrao" name="metaDescricaoPadrao" placeholder="Descrição padrão para páginas sem descrição específica (máx. 160 caracteres)"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="palavrasChaveGlobais">Palavras-chave Globais</label>
-                        <textarea id="palavrasChaveGlobais" name="palavrasChaveGlobais" placeholder="Palavras-chave separadas por vírgula (ex: formação, espiritualidade, esperança)"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="autorEditor">Autor/Editor Padrão</label>
-                        <input type="text" id="autorEditor" name="autorEditor" placeholder="Nome do autor ou editor padrão do conteúdo">
-                    </div>
-                    <div class="form-group">
-                        <label for="urlCanonicaPadrao">URL Canônica Padrão</label>
-                        <input type="url" id="urlCanonicaPadrao" name="urlCanonicaPadrao" placeholder="https://www.seusite.com.br/">
-                    </div>
-                    <div class="form-group">
-                        <label for="robotsMetaTag">Robots Meta Tag Padrão</label>
-                        <select id="robotsMetaTag" name="robotsMetaTag">
-                            <option value="index,follow">index,follow (Padrão)</option>
-                            <option value="noindex,follow">noindex,follow</option>
-                            <option value="index,nofollow">index,nofollow</option>
-                            <option value="noindex,nofollow">noindex,nofollow</option>
-                        </select>
-                    </div>
-                </div>
+    <div class="nav-section-title">Sistema</div>
+    <a href="#" class="nav-item active">
+      <span class="nav-icon">⚙️</span> Configurações
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">🔒</span> Permissões
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">📋</span> Logs
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">💾</span> Backups
+    </a>
+  </nav>
 
-                <!-- Tab: Integrações -->
-                <div id="integracoes" class="tab-pane">
-                    <h2>Configurações de Integrações</h2>
-                    <div class="form-group">
-                        <label for="googleAnalyticsId">Google Analytics ID (UA-XXXXX-Y ou G-XXXXXXXXXX)</label>
-                        <input type="text" id="googleAnalyticsId" name="googleAnalyticsId" placeholder="UA-XXXXX-Y ou G-XXXXXXXXXX">
-                    </div>
-                    <div class="form-group">
-                        <label for="googleTagManagerId">Google Tag Manager ID</label>
-                        <input type="text" id="googleTagManagerId" name="googleTagManagerId" placeholder="GTM-XXXXXXX">
-                    </div>
-                    <div class="form-group">
-                        <label for="facebookPixelId">Facebook Pixel ID</label>
-                        <input type="text" id="facebookPixelId" name="facebookPixelId" placeholder="XXXXXXXXXXXXXXX">
-                    </div>
-                    <div class="form-group">
-                        <label for="whatsappApiToken">WhatsApp API Token (se aplicável)</label>
-                        <input type="text" id="whatsappApiToken" name="whatsappApiToken" placeholder="Seu token de API do WhatsApp Business">
-                    </div>
-                    <div class="form-group">
-                        <label for="recaptchaSiteKey">reCAPTCHA v3 Site Key</label>
-                        <input type="text" id="recaptchaSiteKey" name="recaptchaSiteKey" placeholder="Chave do site reCAPTCHA">
-                    </div>
-                    <div class="form-group">
-                        <label for="recaptchaSecretKey">reCAPTCHA v3 Secret Key</label>
-                        <input type="text" id="recaptchaSecretKey" name="recaptchaSecretKey" placeholder="Chave secreta reCAPTCHA">
-                    </div>
-                </div>
-
-                <!-- Tab: Aparência -->
-                <div id="aparencia" class="tab-pane">
-                    <h2>Configurações de Aparência</h2>
-                    <div class="form-group">
-                        <label for="corPrimaria">Cor Primária</label>
-                        <input type="color" id="corPrimaria" name="corPrimaria" value="#007bff">
-                    </div>
-                    <div class="form-group">
-                        <label for="corSecundaria">Cor Secundária</label>
-                        <input type="color" id="corSecundaria" name="corSecundaria" value="#6c757d">
-                    </div>
-                    <div class="form-group">
-                        <label for="corFundo">Cor de Fundo</label>
-                        <input type="color" id="corFundo" name="corFundo" value="#f8f9fa">
-                    </div>
-                    <div class="form-group">
-                        <label for="corTexto">Cor do Texto</label>
-                        <input type="color" id="corTexto" name="corTexto" value="#212529">
-                    </div>
-                    <div class="form-group">
-                        <label for="fontePrincipal">Fonte Principal (Google Fonts URL)</label>
-                        <input type="url" id="fontePrincipal" name="fontePrincipal" placeholder="Ex: https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap">
-                        <small>Cole a URL do Google Fonts aqui. Ex: `https://fonts.googleapis.com/css2?family=Open+Sans&display=swap`</small>
-                    </div>
-
-                    <h3>Pré-visualização</h3>
-                    <div class="preview-box" id="aparencia-preview">
-                        <h3 id="preview-title">Título de Exemplo</h3>
-                        <p id="preview-text">Este é um parágrafo de texto de exemplo para mostrar como as cores e a fonte se aplicam. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        <a href="#" class="sample-button" id="preview-button">Botão de Exemplo</a>
-                    </div>
-                </div>
-            </div>
-
-            <button type="submit">Salvar Configurações</button>
-            <div id="status-message"></div>
-        </form>
-    </main>
-
-    <script>
-        // Substitua com suas credenciais do Supabase
-        const SUPABASE_URL = 'SUA_URL_SUPABASE'; // Ex: 'https://xyzcompany.supabase.co'
-        const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_SUPABASE'; // Ex: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyNDUzNjUwNywiZXhwIjoxOTQwMTEyNTA3fQ.YOUR_ANON_KEY'
-
-        const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        const form = document.getElementById('admin-config-form');
-        const statusMessage = document.getElementById('status-message');
-
-        // --- Funções de Utilitário ---
-        function showStatus(message, type) {
-            statusMessage.textContent = message;
-            statusMessage.className = `status-message ${type}`;
-            statusMessage.style.display = 'block';
-            setTimeout(() => {
-                statusMessage.style.display = 'none';
-            }, 5000);
-        }
-
-        function populateForm(data) {
-            for (const key in data) {
-                const element = document.getElementById(key);
-                if (element) {
-                    element.value = data[key];
-                }
-            }
-            // Special handling for appearance tab to apply styles immediately
-            applyAppearanceSettings(data);
-        }
-
-        function collectFormData() {
-            const formData = {};
-            const inputs = form.querySelectorAll('input, textarea, select');
-            inputs.forEach(input => {
-                formData[input.id] = input.value;
-            });
-            return formData;
-        }
-
-        // --- Lógica de Abas ---
-        document.querySelectorAll('.tab-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-
-                // Remove 'active' de todos os links e painéis
-                document.querySelectorAll('.tab-link').forEach(item => item.classList.remove('active'));
-                document.querySelectorAll('.tab-pane').forEach(item => item.classList.remove('active'));
-
-                // Adiciona 'active' ao link clicado
-                this.classList.add('active');
-
-                // Adiciona 'active' ao painel correspondente
-                const targetTabId = this.getAttribute('href').substring(1);
-                document.getElementById(targetTabId).classList.add('active');
-            });
-        });
-
-        // --- Lógica de Aparência e Preview ---
-        const corPrimariaInput = document.getElementById('corPrimaria');
-        const corSecundariaInput = document.getElementById('corSecundaria');
-        const corFundoInput = document.getElementById('corFundo');
-        const corTextoInput = document.getElementById('corTexto');
-        const fontePrincipalInput = document.getElementById('fontePrincipal');
-
-        const previewBox = document.getElementById('aparencia-preview');
-        const previewTitle = document.getElementById('preview-title');
-        const previewText = document.getElementById('preview-text');
-        const previewButton = document.getElementById('preview-button');
-
-        function applyAppearanceSettings(settings) {
-            document.documentElement.style.setProperty('--primary-color', settings.corPrimaria || '#007bff');
-            document.documentElement.style.setProperty('--secondary-color', settings.corSecundaria || '#6c757d');
-            document.documentElement.style.setProperty('--background-color', settings.corFundo || '#f8f9fa');
-            document.documentElement.style.setProperty('--text-color', settings.corTexto || '#212529');
-
-            // Apply to preview elements
-            previewBox.style.backgroundColor = settings.corFundo || '#f8f9fa';
-            previewBox.style.color = settings.corTexto || '#212529';
-            previewTitle.style.color = settings.corPrimaria || '#007bff';
-            previewButton.style.backgroundColor = settings.corPrimaria || '#007bff';
-            previewButton.style.color = settings.corTexto === '#000000' || settings.corTexto === '#212529' ? 'white' : 'black'; // Adjust button text color for contrast
-
-            // Font handling
-            if (settings.fontePrincipal) {
-                const linkId = 'google-font-link';
-                let link = document.getElementById(linkId);
-                if (!link) {
-                    link = document.createElement('link');
-                    link.id = linkId;
-                    link.rel = 'stylesheet';
-                    document.head.appendChild(link);
-                }
-                link.href = settings.fontePrincipal;
-
-                // Extract font-family name from the URL (basic attempt)
-                const fontMatch = settings.fontePrincipal.match(/family=([^&:]+)/);
-                if (fontMatch && fontMatch[1]) {
-                    const fontFamilyName = decodeURIComponent(fontMatch[1]).replace(/\+/g, ' ');
-                    document.documentElement.style.setProperty('--font-family', `'${fontFamilyName}', sans-serif`);
-                } else {
-                    document.documentElement.style.setProperty('--font-family', 'Roboto, sans-serif');
-                }
-            } else {
-                document.documentElement.style.setProperty('--font-family', 'Roboto, sans-serif');
-            }
-        }
-
-        // Event listeners for color pickers to update preview in real-time
-        [corPrimariaInput, corSecundariaInput, corFundoInput, corTextoInput, fontePrincipalInput].forEach(input => {
-            input.addEventListener('input', () => {
-                const currentSettings = {
-                    corPrimaria: corPrimariaInput.value,
-                    corSecundaria: corSecundariaInput.value,
-                    corFundo: corFundoInput.value,
-                    corTexto: corTextoInput.value,
-                    fontePrincipal: fontePrincipalInput.value
-                };
-                applyAppearanceSettings(currentSettings);
-            });
-        });
-
-        // --- Supabase: Carregar Configurações ---
-        async function loadSettings() {
-            try {
-                const { data, error } = await supabase
-                    .from('configuracoes')
-                    .select('*')
-                    .eq('id', 1) // Assuming a single configuration row with id = 1
-                    .single();
-
-                if (error && error.code !== 'PGRST116') { // PGRST116 means "no rows found"
-                    throw error;
-                }
-
-                if (data) {
-                    populateForm(data);
-                } else {
-                    console.log('Nenhuma configuração encontrada, iniciando com valores padrão.');
-                    // Optionally set default values if no data exists
-                }
-            } catch (error) {
-                console.error('Erro ao carregar configurações:', error.message);
-                showStatus(`Erro ao carregar configurações: ${error.message}`, 'error');
-            }
-        }
-
-        // --- Supabase: Salvar Configurações ---
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const formData = collectFormData();
-            const configId = document.getElementById('config-id').value;
-
-            try {
-                const { data, error } = await supabase
-                    .from('configuracoes')
-                    .upsert({ id: configId, ...formData }, { onConflict: 'id' }); // Use upsert to insert or update
-
-                if (error) {
-                    throw error;
-                }
-
-                showStatus('Configurações salvas com sucesso!', 'success');
-                console.log('Configurações salvas:', data);
-                // Re-apply appearance settings in case font URL was changed
+  <div class="sidebar-footer">
+    v2.4.1 ·
