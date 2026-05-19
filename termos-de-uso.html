@@ -4,298 +4,1084 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Termos de Uso - Fazenda da Esperança Formação</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #2563eb;
-            --secondary-color: #0ea5e9;
-            --text-color: #333;
-            --light-gray: #f9fafb;
-            --dark-gray: #1f2937;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            color: var(--text-color);
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #0ea5e9;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --border: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
             line-height: 1.6;
-            background-color: #ffffff;
         }
 
-        .container {
-            max-width: 960px;
+        /* ===== HEADER ===== */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .header-inner {
+            max-width: 1200px;
             margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1.2;
+        }
+
+        .logo-sub {
+            font-size: 11px;
+            color: rgba(255,255,255,0.8);
+            font-weight: 400;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        nav a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 14px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,0.15);
+            color: var(--white);
+        }
+
+        .btn-whatsapp-header {
+            background: rgba(255,255,255,0.2);
+            color: var(--white) !important;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px !important;
+            border-radius: 8px;
+            font-weight: 600 !important;
+            transition: all 0.2s;
+        }
+
+        .btn-whatsapp-header:hover {
+            background: rgba(255,255,255,0.35) !important;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: var(--white);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        /* ===== HERO BANNER ===== */
+        .page-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 60px 24px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .page-hero .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: var(--white);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .page-hero h1 {
+            font-size: clamp(28px, 5vw, 44px);
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .page-hero p {
+            font-size: 16px;
+            color: rgba(255,255,255,0.85);
+            max-width: 600px;
+            margin: 0 auto 24px;
+        }
+
+        .vigencia-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: var(--white);
+            font-size: 13px;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 8px;
+        }
+
+        /* ===== BREADCRUMB ===== */
+        .breadcrumb-bar {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 24px;
+        }
+
+        .breadcrumb-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--gray);
+        }
+
+        .breadcrumb-inner a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb-inner a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb-inner span {
+            color: var(--gray);
+        }
+
+        /* ===== MAIN LAYOUT ===== */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px 80px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            position: sticky;
+            top: 90px;
+        }
+
+        .sidebar-card {
+            background: var(--white);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+
+        .sidebar-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 18px 20px;
+            color: var(--white);
+        }
+
+        .sidebar-header h3 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-nav {
+            padding: 12px 0;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            color: var(--dark);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-nav a:hover {
+            background: #eff6ff;
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .sidebar-nav a .nav-num {
+            width: 22px;
+            height: 22px;
+            background: #eff6ff;
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .sidebar-info {
+            margin-top: 20px;
+            background: var(--white);
+            border-radius: 16px;
+            border: 1px solid var(--border);
             padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
         }
 
-        /* Header Styling */
-        .header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        .sidebar-info h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .header .container {
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 11px;
+            color: var(--gray);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .info-value {
+            font-size: 13px;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        /* ===== CONTENT ===== */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .intro-card {
+            background: linear-gradient(135deg, #eff6ff, #e0f2fe);
+            border: 1px solid #bfdbfe;
+            border-radius: 16px;
+            padding: 28px 32px;
+        }
+
+        .intro-card p {
+            font-size: 15px;
+            color: var(--dark);
+            line-height: 1.8;
+        }
+
+        .intro-card strong {
+            color: var(--primary);
+        }
+
+        .section-card {
+            background: var(--white);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            scroll-margin-top: 90px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 22px 28px;
+            background: linear-gradient(135deg, #f8fafc, #eff6ff);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-num {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .section-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .section-body {
+            padding: 28px 32px;
+        }
+
+        .section-body p {
+            font-size: 14px;
+            color: #374151;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .section-body p:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-body h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 20px 0 10px;
+        }
+
+        .section-body ul,
+        .section-body ol {
+            padding-left: 20px;
+            margin-bottom: 16px;
+        }
+
+        .section-body li {
+            font-size: 14px;
+            color: #374151;
+            line-height: 1.8;
+            margin-bottom: 6px;
+        }
+
+        .section-body li::marker {
+            color: var(--primary);
+        }
+
+        /* Highlight boxes */
+        .highlight-box {
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .highlight-box.info {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+        }
+
+        .highlight-box.warning {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+        }
+
+        .highlight-box.success {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+        }
+
+        .highlight-box.danger {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+        }
+
+        .highlight-box .icon {
+            font-size: 18px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .highlight-box .text {
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--dark);
+        }
+
+        .highlight-box .text strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 13px;
+        }
+
+        .highlight-box.info .text strong { color: var(--primary); }
+        .highlight-box.warning .text strong { color: #92400e; }
+        .highlight-box.success .text strong { color: #166534; }
+        .highlight-box.danger .text strong { color: #991b1b; }
+
+        /* Rights grid */
+        .rights-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin: 16px 0;
+        }
+
+        .right-item {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 16px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .right-item .right-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .right-item .right-text h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 3px;
+        }
+
+        .right-item .right-text p {
+            font-size: 12px;
+            color: var(--gray);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Data table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 13px;
+        }
+
+        .data-table thead tr {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .data-table thead th {
+            color: var(--white);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .data-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .data-table tbody td {
+            padding: 12px 16px;
+            color: #374151;
+            vertical-align: top;
+        }
+
+        .data-table tbody td:first-child {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        /* Cookie types */
+        .cookie-grid {
+            display: grid;
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .cookie-item {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 20px;
+            gap: 12px;
         }
 
-        .header .logo {
-            font-size: 1.8em;
+        .cookie-info h4 {
+            font-size: 13px;
             font-weight: 700;
-            color: white;
-            text-decoration: none;
+            color: var(--dark);
+            margin-bottom: 3px;
         }
 
-        .header nav ul {
-            list-style: none;
+        .cookie-info p {
+            font-size: 12px;
+            color: var(--gray);
             margin: 0;
-            padding: 0;
-            display: flex;
+            line-height: 1.5;
         }
 
-        .header nav ul li {
-            margin-left: 25px;
+        .cookie-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
-        .header nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
+        .cookie-badge.required {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
         }
 
-        .header nav ul li a:hover,
-        .header nav ul li a.active {
-            color: var(--secondary-color);
+        .cookie-badge.optional {
+            background: #fffbeb;
+            color: #92400e;
+            border: 1px solid #fde68a;
         }
 
-        /* Main Content Styling */
-        .main-content {
-            padding: 40px 0;
-            background-color: #ffffff;
-        }
-
-        .main-content h1 {
-            font-size: 2.5em;
-            color: var(--dark-gray);
-            margin-bottom: 20px;
+        /* Contact card */
+        .contact-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 16px;
+            padding: 32px;
+            color: var(--white);
             text-align: center;
         }
 
-        .main-content h2 {
-            font-size: 1.8em;
-            color: var(--primary-color);
-            margin-top: 30px;
-            margin-bottom: 15px;
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 5px;
-        }
-
-        .main-content h3 {
-            font-size: 1.4em;
-            color: var(--dark-gray);
-            margin-top: 25px;
+        .contact-card h3 {
+            font-size: 20px;
+            font-weight: 700;
             margin-bottom: 10px;
         }
 
-        .main-content p {
-            margin-bottom: 15px;
+        .contact-card p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 24px;
+            line-height: 1.7;
         }
 
-        .main-content ul {
-            list-style: disc;
-            margin-left: 20px;
-            margin-bottom: 15px;
+        .contact-methods {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
-        .main-content ul li {
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 22px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .contact-btn.white {
+            background: var(--white);
+            color: var(--primary);
+        }
+
+        .contact-btn.white:hover {
+            background: #f0f9ff;
+            transform: translateY(-1px);
+        }
+
+        .contact-btn.outline {
+            background: rgba(255,255,255,0.15);
+            color: var(--white);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .contact-btn.outline:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        /* DPO card */
+        .dpo-card {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 16px 0;
+        }
+
+        .dpo-card h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #166534;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dpo-card p {
+            font-size: 13px;
+            color: #374151;
+            margin-bottom: 6px;
+            line-height: 1.6;
+        }
+
+        .dpo-card a {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Retention table */
+        .retention-grid {
+            display: grid;
+            gap: 10px;
+            margin: 16px 0;
+        }
+
+        .retention-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 16px;
+        }
+
+        .retention-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .retention-info {
+            flex: 1;
+        }
+
+        .retention-info h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 2px;
+        }
+
+        .retention-info p {
+            font-size: 12px;
+            color: var(--gray);
+            margin: 0;
+        }
+
+        .retention-time {
+            background: #eff6ff;
+            color: var(--primary);
+            border: 1px solid #bfdbfe;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--dark);
+            color: rgba(255,255,255,0.85);
+            padding: 60px 24px 0;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-brand .logo-name {
+            font-size: 18px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .footer-brand p {
+            font-size: 13px;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.65);
+            margin-bottom: 20px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 10px;
+        }
+
+        .social-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .social-btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .footer-col h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
             margin-bottom: 8px;
         }
 
-        .main-content a {
-            color: var(--primary-color);
+        .footer-col ul li a {
+            color: rgba(255,255,255,0.65);
             text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
         }
 
-        .main-content a:hover {
-            text-decoration: underline;
+        .footer-col ul li a:hover {
+            color: var(--secondary);
         }
 
-        /* Footer Styling */
-        .footer {
-            background-color: var(--dark-gray);
-            color: white;
-            padding: 30px 0;
-            text-align: center;
-            font-size: 0.9em;
-            margin-top: 40px;
+        .footer-bottom {
+            padding: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
-        .footer .container {
-            padding: 0 20px;
+        .footer-bottom p {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
         }
 
-        .footer p {
-            margin: 0 0 10px 0;
+        .footer-bottom-links {
+            display: flex;
+            gap: 16px;
         }
 
-        .footer a {
-            color: var(--secondary-color);
+        .footer-bottom-links a {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: color 0.2s;
         }
 
-        .footer a:hover {
-            color: white;
-            text-decoration: underline;
+        .footer-bottom-links a:hover {
+            color: var(--secondary);
         }
 
-        /* Responsive adjustments */
+        .footer-bottom-links a.active {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        /* ===== WHATSAPP FLOAT ===== */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            z-index: 999;
+        }
+
+        .whatsapp-float a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #25d366;
+            color: var(--white);
+            text-decoration: none;
+            padding: 14px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s;
+        }
+
+        .whatsapp-float a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(37, 211, 102, 0.5);
+        }
+
+        .whatsapp-float .pulse {
+            width: 10px;
+            height: 10px;
+            background: var(--white);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.8); }
+        }
+
+        /* ===== BACK TO TOP ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 28px;
+            left: 28px;
+            z-index: 999;
+        }
+
+        .back-to-top a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: var(--primary);
+            color: var(--white);
+            border-radius: 50%;
+            text-decoration: none;
+            font-size: 18px;
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
+            transition: all 0.2s;
+        }
+
+        .back-to-top a:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .sidebar-nav {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
-            .header .container {
-                flex-direction: column;
-                text-align: center;
+            nav {
+                display: none;
             }
 
-            .header nav ul {
-                margin-top: 15px;
-                flex-wrap: wrap;
-                justify-content: center;
+            .hamburger {
+                display: flex;
             }
 
-            .header nav ul li {
-                margin: 0 10px 10px 10px;
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
             }
 
-            .main-content h1 {
-                font-size: 2em;
+            .rights-grid {
+                grid-template-columns: 1fr;
             }
 
-            .main-content h2 {
-                font-size: 1.5em;
+            .section-body {
+                padding: 20px;
             }
 
-            .main-content h3 {
-                font-size: 1.2em;
+            .intro-card {
+                padding: 20px;
+            }
+
+            .contact-card {
+                padding: 24px 20px;
+            }
+
+            .sidebar-nav {
+                grid-template-columns: 1fr;
+            }
+
+            .data-table {
+                font-size: 12px;
+            }
+
+            .data-table thead th,
+            .data-table tbody td {
+                padding: 10px 12px;
             }
         }
 
         @media (max-width: 480px) {
-            .header .logo {
-                font-size: 1.5em;
+            .footer-grid {
+                grid-template-columns: 1fr;
             }
 
-            .header nav ul li {
-                margin: 0 5px 10px 5px;
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .contact-methods {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .whatsapp-float a span {
+                display: none;
+            }
+
+            .whatsapp-float a {
+                padding: 14px;
+                border-radius: 50%;
+            }
+
+            .cookie-item {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <a href="#" class="logo">Fazenda da Esperança Formação</a>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="header-inner">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🌱</div>
+                <div class="logo-text">
+                    <span class="logo-name">Fazenda da Esperança</span>
+                    <span class="logo-sub">Formação Online</span>
+                </div>
+            </a>
             <nav>
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Cursos</a></li>
-                    <li><a href="#">Contato</a></li>
-                    <li><a href="#" class="active">Termos de Uso</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <main class="main-content">
-        <div class="container">
-            <h1>Termos de Uso</h1>
-            <p><strong>Data de Vigência:</strong> 23 de Outubro de 2023</p>
-
-            <section>
-                <h2>1. Introdução</h2>
-                <p>Bem-vindo à Fazenda da Esperança Formação. Estes Termos de Uso regem o acesso e a utilização dos nossos serviços de cursos online, disponíveis através de links para vídeos e conteúdos hospedados em plataformas de terceiros, como o YouTube. Ao acessar ou utilizar nossos serviços, você concorda em cumprir e estar vinculado a estes Termos.</p>
-            </section>
-
-            <section>
-                <h2>2. Aceitação dos Termos</h2>
-                <p>Ao se cadastrar, acessar ou utilizar qualquer serviço da Fazenda da Esperança Formação, você manifesta sua plena concordância com estes Termos de Uso e com nossa Política de Privacidade. Caso não concorde com qualquer disposição destes Termos, por favor, não utilize nossos serviços.</p>
-            </section>
-
-            <section>
-                <h2>3. Descrição do Serviço</h2>
-                <p>A Fazenda da Esperança Formação oferece cursos online com conteúdo educacional e formativo. Nossos cursos são disponibilizados principalmente através de links para vídeos hospedados no YouTube e outros materiais complementares. Não hospedamos os vídeos diretamente em nossa plataforma, atuando como um agregador e facilitador de acesso a esses conteúdos.</p>
-            </section>
-
-            <section>
-                <h2>4. Direitos do Usuário</h2>
-                <p>Como usuário da Fazenda da Esperança Formação, você tem os seguintes direitos:</p>
-                <ul>
-                    <li><strong>Acesso aos Cursos:</strong> Direito de acessar os cursos e materiais disponíveis na plataforma, conforme as condições de acesso (gratuitos ou pagos, se aplicável).</li>
-                    <li><strong>Privacidade e Proteção de Dados (LGPD - Art. 18):</strong> De acordo com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), você tem o direito de:
-                        <ul>
-                            <li>Confirmar a existência de tratamento de seus dados.</li>
-                            <li>Acessar seus dados.</li>
-                            <li>Corrigir dados incompletos, inexatos ou desatualizados.</li>
-                            <li>Anonimizar, bloquear ou eliminar dados desnecessários, excessivos ou tratados em desconformidade com a LGPD.</li>
-                            <li>Portabilidade dos dados a outro fornecedor de serviço ou produto, mediante requisição expressa.</li>
-                            <li>Eliminação dos dados pessoais tratados com o seu consentimento, exceto nas hipóteses previstas em lei.</li>
-                            <li>Informação sobre as entidades públicas e privadas com as quais o controlador realizou uso compartilhado de dados.</li>
-                            <li>Informação sobre a possibilidade de não fornecer consentimento e sobre as consequências da negativa.</li>
-                            <li>Revogação do consentimento, a qualquer tempo.</li>
-                        </ul>
-                    </li>
-                    <li><strong>Suporte:</strong> Direito a suporte técnico e pedagógico para dúvidas relacionadas ao uso da plataforma e ao conteúdo dos cursos.</li>
-                </ul>
-            </section>
-
-            <section>
-                <h2>5. Responsabilidades do Usuário</h2>
-                <p>Ao utilizar os serviços da Fazenda da Esperança Formação, você se compromete a:</p>
-                <ul>
-                    <li>Utilizar a plataforma de forma ética e legal, respeitando a legislação vigente e estes Termos de Uso.</li>
-                    <li>Não compartilhar suas credenciais de acesso (login e senha) com terceiros, sendo o único responsável pela segurança de sua conta.</li>
-                    <li>Não reproduzir, distribuir, modificar, exibir, executar, publicar ou criar trabalhos derivados de qualquer conteúdo dos cursos sem autorização prévia e expressa da Fazenda da Esperança Formação e/ou dos detentores dos direitos autorais.</li>
-                    <li>Não utilizar os serviços para fins ilegais, fraudulentos, difamatórios, obscenos, ameaçadores ou que violem os direitos de terceiros.</li>
-                    <li>Respeitar os direitos autorais e de propriedade intelectual de todo o conteúdo acessado, incluindo os vídeos hospedados no YouTube.</li>
-                    <li>Fornecer informações verdadeiras, precisas, completas e atualizadas no momento do cadastro e sempre que solicitado.</li>
-                </ul>
-            </section>
-
-            <section>
-                <h2>6. Dados Coletados</h2>
-                <p>Para a prestação de nossos serviços, a Fazenda da Esperança Formação poderá coletar os seguintes tipos de dados:</p>
-                <ul>
-                    <li><strong>Dados de Cadastro:</strong> Nome completo, endereço de e-mail, telefone, informações de pagamento (se aplicável).</li>
-                    <li><strong>Dados de Uso:</strong> Informações sobre como você interage com a plataforma, como cursos acessados, tempo de visualização, progresso, cliques e páginas visitadas.</li>
-                    <li><strong>Dados Técnicos:</strong> Endereço IP, tipo de navegador, sistema operacional, provedor de internet, informações do dispositivo.</li>
-                    <li><strong>Dados de Comunicação:</strong> Conteúdo de mensagens enviadas para nosso suporte ou através de formulários de contato.</li>
-                </ul>
-                <p>A coleta desses dados visa aprimorar a experiência do usuário, personalizar o conteúdo, garantir a segurança da plataforma e cumprir obrigações legais.</p>
-            </section>
-
-            <section>
-                <h2>7. Cookies e Tecnologias Semelhantes</h2>
-                <p>Utilizamos cookies e outras tecnologias de rastreamento para melhorar sua experiência de navegação, analisar o tráfego do site, personalizar conteúdo e anúncios, e entender de onde nossos visitantes vêm. Cookies são pequenos arquivos de texto armazenados em seu dispositivo que nos permitem reconhecê-lo em visitas futuras. Você pode gerenciar suas preferências de cookies através das configurações do seu navegador.</p>
-            </section>
-
-            <section>
-                <h2>8. Prazo de Retenção dos Dados</h2>
-                <p>Os dados pessoais coletados pela Fazenda da Esperança Formação serão retidos pelo tempo necessário para cumprir as finalidades para as quais foram coletados, incluindo a prestação dos serviços, o cumprimento de obrigações legais ou regulatórias, a resolução de disputas e a aplicação de nossos acordos. Após o término do prazo de retenção, os dados serão eliminados de forma segura ou anonimizados, conforme a legislação aplicável.</p>
-            </section>
-
-            <section>
-                <h2>9. Links para Terceiros</h2>
-                <p>Nossa plataforma contém links para sites e conteúdos de terceiros, como os vídeos hospedados no YouTube. Não somos responsáveis pelas práticas de privacidade ou pelo conteúdo desses sites. Recomendamos que você leia os termos de uso e políticas de privacidade de qualquer site de terceiros que visitar.</p>
-            </section>
-
-            <section>
-                <h2>10. Modificações dos Termos</h2>
-                <p>A Fazenda da Esperança Formação reserva-se o direito de modificar estes Termos de Uso a qualquer momento, sem aviso prévio. Quaisquer alterações entrarão em vigor imediatamente após sua publicação em nossa plataforma. Recomendamos que você revise periodicamente
+                <a href="index.html">Início</a>
