@@ -1,19 +1,862 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin - Fazenda da Esperança Formação</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        :root {
-            --primary-color: #2563eb;
-            --bg-color: #1a202c; /* Dark background */
-            --text-color: #e2e8f0; /* Light text */
-            --card-bg: #2d3748; /* Darker card background */
-            --sidebar-bg: #1a202c; /* Same as main bg for seamless look */
-            --border-color: #4a5
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard – Fazenda da Esperança Formação</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-light: #3b82f6;
+    --bg: #0f172a;
+    --bg-card: #1e293b;
+    --bg-sidebar: #0f172a;
+    --border: #334155;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --sidebar-w: 220px;
+    --radius: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: var(--sidebar-w);
+    min-height: 100vh;
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0;
+    z-index: 100;
+    transition: transform .3s ease;
+  }
+
+  .sidebar-logo {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-logo .logo-icon {
+    width: 44px; height: 44px;
+    background: var(--primary);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  .sidebar-logo h2 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .sidebar-logo span {
+    font-size: 11px;
+    color: var(--primary-light);
+    font-weight: 500;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .nav-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    padding: 8px 8px 4px;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all .2s;
+    cursor: pointer;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+
+  .nav-link:hover {
+    background: rgba(37,99,235,.15);
+    color: var(--primary-light);
+  }
+
+  .nav-link.active {
+    background: rgba(37,99,235,.2);
+    color: var(--primary-light);
+    border-left: 3px solid var(--primary);
+  }
+
+  .nav-link .icon { font-size: 17px; width: 20px; text-align: center; }
+
+  .sidebar-footer {
+    padding: 16px 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn-logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: rgba(239,68,68,.1);
+    color: #fca5a5;
+    border: 1px solid rgba(239,68,68,.2);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    transition: all .2s;
+  }
+
+  .btn-logout:hover {
+    background: rgba(239,68,68,.2);
+    color: #f87171;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hamburger {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 22px;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .topbar h1 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .badge-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--success);
+    background: rgba(34,197,94,.1);
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(34,197,94,.2);
+  }
+
+  .badge-status .dot {
+    width: 7px; height: 7px;
+    background: var(--success);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity:1; }
+    50% { opacity:.4; }
+  }
+
+  .avatar {
+    width: 36px; height: 36px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* ── CONTENT ── */
+  .content {
+    padding: 28px;
+    flex: 1;
+  }
+
+  /* ── METRICS ── */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+
+  .metric-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    position: relative;
+    overflow: hidden;
+    transition: transform .2s, box-shadow .2s;
+  }
+
+  .metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,.3);
+  }
+
+  .metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+
+  .metric-card.blue::before { background: var(--primary); }
+  .metric-card.green::before { background: var(--success); }
+  .metric-card.yellow::before { background: var(--warning); }
+  .metric-card.red::before { background: var(--danger); }
+
+  .metric-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .metric-icon {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+
+  .metric-card.blue .metric-icon { background: rgba(37,99,235,.15); }
+  .metric-card.green .metric-icon { background: rgba(34,197,94,.15); }
+  .metric-card.yellow .metric-icon { background: rgba(245,158,11,.15); }
+  .metric-card.red .metric-icon { background: rgba(239,68,68,.15); }
+
+  .metric-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+
+  .badge-up { background: rgba(34,197,94,.15); color: var(--success); }
+  .badge-down { background: rgba(239,68,68,.15); color: var(--danger); }
+
+  .metric-value {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .metric-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* ── GRID MIDDLE ── */
+  .mid-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .card-subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .btn-sm {
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.05);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all .2s;
+  }
+
+  .btn-sm:hover { background: rgba(255,255,255,.1); color: var(--text); }
+
+  .chart-container {
+    position: relative;
+    height: 240px;
+  }
+
+  /* ── MINI STATS ── */
+  .mini-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .mini-stat {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    background: rgba(255,255,255,.03);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .mini-stat-icon {
+    width: 38px; height: 38px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .mini-stat-info { flex: 1; }
+
+  .mini-stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+  }
+
+  .mini-stat-value {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 6px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+
+  /* ── TABLE ── */
+  .table-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .table-card .card-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    margin: 0;
+  }
+
+  .table-wrap { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    padding: 12px 20px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    background: rgba(255,255,255,.02);
+    border-bottom: 1px solid var(--border);
+  }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(51,65,85,.5);
+    transition: background .15s;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,.03); }
+
+  tbody td {
+    padding: 14px 20px;
+    font-size: 13px;
+    color: var(--text);
+    vertical-align: middle;
+  }
+
+  .td-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .td-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .td-name { font-weight: 600; }
+  .td-email { font-size: 11px; color: var(--text-muted); }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .pill-blue { background: rgba(37,99,235,.15); color: #93c5fd; }
+  .pill-green { background: rgba(34,197,94,.15); color: #86efac; }
+  .pill-yellow { background: rgba(245,158,11,.15); color: #fcd34d; }
+  .pill-purple { background: rgba(168,85,247,.15); color: #d8b4fe; }
+
+  /* ── LOADING ── */
+  .skeleton {
+    background: linear-gradient(90deg, var(--border) 25%, rgba(71,85,105,.5) 50%, var(--border) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* ── OVERLAY ── */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    z-index: 90;
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text);
+    box-shadow: 0 10px 40px rgba(0,0,0,.4);
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all .3s ease;
+    z-index: 999;
+    max-width: 320px;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast-icon { font-size: 18px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1100px) {
+    .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+    .mid-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      transform: translateX(-100%);
+    }
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    .sidebar-overlay.open { display: block; }
+    .main { margin-left: 0; }
+    .hamburger { display: block; }
+    .metrics-grid { grid-template-columns: 1fr 1fr; }
+    .content { padding: 16px; }
+    .topbar { padding: 14px 16px; }
+    .badge-status span { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .metrics-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Overlay mobile -->
+<div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">🌱</div>
+    <h2>Fazenda da Esperança</h2>
+    <span>Formação Online</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-label">Menu</div>
+
+    <a class="nav-link active" href="#" onclick="setActive(this)">
+      <span class="icon">📊</span> Dashboard
+    </a>
+    <a class="nav-link" href="#" onclick="setActive(this)">
+      <span class="icon">📚</span> Conteúdo
+    </a>
+    <a class="nav-link" href="#" onclick="setActive(this)">
+      <span class="icon">👥</span> Usuários
+    </a>
+    <a class="nav-link" href="#" onclick="setActive(this)">
+      <span class="icon">📋</span> Formulários
+    </a>
+
+    <div class="nav-label" style="margin-top:8px">Sistema</div>
+
+    <a class="nav-link" href="#" onclick="setActive(this)">
+      <span class="icon">⚙️</span> Configurações
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="btn-logout" onclick="handleLogout()">
+      <span>🚪</span> Sair
+    </button>
+  </div>
+</aside>
+
+<!-- ── MAIN ── -->
+<div class="main">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="hamburger" onclick="toggleSidebar()">☰</button>
+      <div>
+        <h1>Dashboard</h1>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="badge-status">
+        <div class="dot"></div>
+        <span>Sistema online</span>
+      </div>
+      <div class="avatar" title="Admin">A</div>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- Metrics -->
+    <div class="metrics-grid">
+      <div class="metric-card blue">
+        <div class="metric-header">
+          <div class="metric-icon">👥</div>
+          <span class="metric-badge badge-up" id="badge-users">↑ —</span>
+        </div>
+        <div class="metric-value" id="val-users">—</div>
+        <div class="metric-label">Total de Usuários</div>
+      </div>
+
+      <div class="metric-card green">
+        <div class="metric-header">
+          <div class="metric-icon">📝</div>
+          <span class="metric-badge badge-up" id="badge-leads">↑ —</span>
+        </div>
+        <div class="metric-value" id="val-leads">—</div>
+        <div class="metric-label">Leads Captados</div>
+      </div>
+
+      <div class="metric-card yellow">
+        <div class="metric-header">
+          <div class="metric-icon">🎓</div>
+          <span class="metric-badge badge-up" id="badge-courses">↑ —</span>
+        </div>
+        <div class="metric-value" id="val-courses">—</div>
+        <div class="metric-label">Cursos Ativos</div>
+      </div>
+
+      <div class="metric-card red">
+        <div class="metric-header">
+          <div class="metric-icon">✅</div>
+          <span class="metric-badge badge-up" id="badge-complete">↑ —</span>
+        </div>
+        <div class="metric-value" id="val-complete">—</div>
+        <div class="metric-label">Conclusões</div>
+      </div>
+    </div>
+
+    <!-- Mid grid -->
+    <div class="mid-grid">
+
+      <!-- Chart -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Leads por Mês</div>
+            <div class="card-subtitle">Últimos 6 meses</div>
+          </div>
+          <button class="btn-sm">Exportar</button>
+        </div>
+        <div class="chart-container">
+          <canvas id="leadsChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Mini stats -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Cursos em Destaque</div>
+            <div class="card-subtitle">Engajamento atual</div>
+          </div>
+        </div>
+        <div class="mini-stats" id="mini-stats">
+          <!-- preenchido via JS -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Últimos Leads</div>
+          <div class="card-subtitle">5 registros mais recentes</div>
+        </div>
+        <button class="btn-sm" onclick="loadLeads()">↻ Atualizar</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Curso</th>
+              <th>Origem</th>
+              <th>Status</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody id="leads-tbody">
+            <tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:30px">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toast-icon">ℹ️</span>
+  <span id="toast-msg">Mensagem</span>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   CONFIGURAÇÃO SUPABASE
+═══════════════════════════════════════════ */
+const SUPABASE_URL = 'https://SEU_PROJETO.supabase.co';
+const SUPABASE_KEY = 'SUA_ANON_KEY_AQUI';
+
+/* ── init ── */
+let supabaseClient = null;
+try {
+  supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+} catch(e) {
+  console.warn('Supabase não inicializado:', e.message);
+}
+
+/* ═══════════════════════════════════════════
+   DADOS MOCK (fallback quando Supabase não está configurado)
+═══════════════════════════════════════════ */
+const MOCK = {
+  metrics: {
+    users: 1_248,
+    leads: 3_572,
+    courses: 14,
+    completions: 892
+  },
+  chartData: {
+    labels: ['Jan','Fev','Mar','Abr','Mai','Jun'],
+    values: [210, 340, 280, 490, 420, 610]
+  },
+  courses: [
+    { name: 'Espiritualidade e Vida', pct: 87, color: '#2563eb' },
+    { name: 'Formação Humana Integral', pct: 72, color: '#22c55e' },
+    { name: 'Família e Sociedade', pct: 58, color: '#f59e0b' },
+    { name: 'Missão e Evangelização', pct: 44, color: '#a855f7' }
+  ],
+  leads: [
+    { name: 'Ana Clara Souza', email: 'ana@email.com', course: 'Espiritualidade e Vida', origin: 'Instagram', status: 'Novo', date: '2025-06-10', color: '#2563eb', initials: 'AC' },
+    { name: 'João Paulo Melo', email: 'joao@email.com', course: 'Família e Sociedade', origin: 'Google', status: 'Contato', date: '2025-06-09', color: '#22c55e', initials: 'JP' },
+    { name: 'Maria Fernanda Lima', email: 'mf@email.com', course: 'Formação Humana', origin: 'WhatsApp', status: 'Inscrito', date: '2025-06-08', color: '#f59e0b', initials: 'MF' },
+    { name: 'Carlos Eduardo Reis', email: 'carlos@email.com', course: 'Missão e Evangelização', origin: 'Facebook', status: 'Novo', date: '2025-06-07', color: '#a855f7', initials: 'CE' },
+    { name: 'Beatriz Alves Costa', email: 'bea@email.com', course: 'Espiritualidade e Vida', origin: 'Indicação', status: 'Inscrito', date: '2025-06-06', color: '#ef4444', initials: 'BA' }
+  ]
+};
+
+/* ═══════════════════════════════════════════
+   VERIFICAR SESSÃO
+═══════════════════════════════════════════ */
+async function checkSession() {
+  if (!supabaseClient) {
+    showToast('ℹ️', 'Modo demo – configure SUPABASE_URL e SUPABASE_KEY');
+    return true; // continua com mock
+  }
+  try {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) {
+      showToast('⚠️', 'Sessão expirada. Redirecionando...');
+      setTimeout(() => window.location.href = '/login.html', 2000);
+      return false;
+    }
+    const email = session.user.email || 'Admin';
+    document.querySelector('.avatar').textContent = email[0].toUpperCase();
+    return true;
+  } catch(e) {
+    console.warn('Erro ao verificar sessão:', e);
+    return true;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   BUSCAR MÉTRICAS
+═══════════════════════════════════════════ */
+async function loadMetrics() {
+  let data = MOCK.metrics;
+
+  if (supabaseClient && SUPABASE_URL !== 'https://SEU_PROJETO.supabase.co') {
+    try {
+      const [u, l, c, cp] = await Promise.all([
+        supabaseClient.from('users').select('id', { count: 'exact', head: true }),
+        supabaseClient.from('leads').select('id', { count: 'exact', head: true }),
+        supabaseClient.from('courses').select('id', { count: 'exact', head: true }).eq('active', true),
+        supabaseClient.from('enrollments').select('id', { count: 'exact', head: true }).eq('completed', true)
+      ]);
+      data = {
+        users: u.count ?? MOCK.metrics.users,
+        leads: l.count ?? MOCK.metrics.leads,
+        courses: c.count ?? MOCK.metrics.courses,
+        completions: cp.count ?? MOCK.metrics.completions
+      };
+    } catch(e) { console.warn('Usando mock para métricas'); }
+  }
+
+  animateCount('val-users', data.users);
+  animateCount('val-leads', data.leads);
+  animateCount('val-courses', data.courses);
+  animateCount('val-complete', data.completions);
+
+  document.getElementById('badge-users').textContent = '↑ 12%';
+  document.getElementById('badge-leads').textContent = '↑ 8%';
+  document.getElementById('badge-courses').textContent = '↑ 2';
+  document.getElementById('badge-complete').textContent = '↑ 15%';
+}
+
+function animateCount(id, target) {
+  const el = document.getElementById(id);
+  let start = 0;
+  const step = Math.ceil(target / 40);
+  const timer = setInterval(() => {
+    start += step;
+    if (start >= target) { start = target; clearInterval(timer); }
+    el.textContent = start.toLocaleString('pt-BR');
+  }, 35);
+}
